@@ -1,0 +1,74 @@
+/*
+  Streaker Color Scheme
+  CSS Default for Plus CMS
+*/
+
+ /* General page style. The scroll bar colors only visible in MSIE 5.5+ */
+body {
+	background-color:#66CCFF;
+}
+table.pagebox {
+	width:100%;
+	padding:2px;
+	text-align: center;
+	border: 0px #98AAB1 solid;
+}
+.debug {
+	width:100%;
+	vertical-align:top;
+	text-align:left;
+}
+.debug_left {
+	vertical-align:top;
+	text-align:right;
+	font-size:13px;
+	color:#FF00FF;
+	font-weight: bold;
+}
+.debug_right {
+	width:100%;
+	vertical-align:top;
+	text-align:left;
+	font-size:11px; 
+	color:#FFFFFF;
+}
+.debug_total {
+	width:100%;
+	vertical-align:top;
+	text-align:center;
+	font-size:12px; 
+	color:#FF0000;
+}
+table.memberlist {
+	width:100%;
+	text-align:center;
+	vertical-align:top;
+	color:#000000;
+	border: 2px #006699 solid;
+	padding:0px;
+}
+th.memberlist {
+	border-style:solid;
+}
+td.memberlist {
+	border-style:double;
+}
+h1.blog_hdr {
+	text-align:center;
+	color:#000000;
+}
+h3.blog_hdr {
+	text-align:right;
+	color:#FFFF00;
+}
+table.blog_posts {
+	width:100%;
+	border: 2px #006699 solid;
+	padding:0px;
+}
+td.blog_posts {
+	width:100%;
+	border: 1px #000000 solid;
+	padding:0px;
+	text-align:left;
+}
