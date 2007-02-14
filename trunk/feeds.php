@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************
- * @version $Id: feeds.php,v 1.4 2005/06/25 03:36:08 impleri Exp $
+ * @version $Id: feeds.php,v 1.3 2005/06/23 14:57:18 impleri Exp $
  * @package pluscms
  * @copyright (C) 2005 impleri.net
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL

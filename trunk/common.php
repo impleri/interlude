@@ -1,19 +1,26 @@
 <?php
 /***************************************************************************
- * @version $Id: common.php,v 1.9 2005/06/25 03:36:08 impleri Exp $
- * @package pluscms
- * @copyright (C) 2005 impleri.net
- * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- * 
- * begin		: Saturday, 23 April 2005
- * email		: christopher@impleri.net
- * Version		: 0.0.1 - 2005/05/20
- * 
- * Plus CMS is Open Source Software
- * 
+ *							 common.php
+ *							----------------
+ *	package	: core
+ *	begin		: 1 January 2006
+ *	copyright	: impleri
+ *	email		: impleri@impleri.net
+ *
+ *	version	: 0.0.1 - 01/01/2006
+ *
  ***************************************************************************/
 
-defined( '_IN_PLUS' ) or die( 'Direct Access to this location is not allowed.' );
+/***************************************************************************
+ *
+ *   This program is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation; either version 2 of the License, or
+ *   (at your option) any later version.
+ *
+ ***************************************************************************/
+
+defined( '_IN_IL_' ) or die( 'Direct Access to this location is not allowed.' );
 
 // checks for config.  Loads installation if not found.
  if ( !file_exists( 'config.php' ) || filesize( 'config.php' ) < 10 ) {

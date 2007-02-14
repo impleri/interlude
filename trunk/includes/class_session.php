@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************
- * @version $Id: class_session.php,v 1.8 2005/06/25 03:36:10 impleri Exp $
+ * @version $Id: class_session.php,v 1.7 2005/06/23 14:57:22 impleri Exp $
  * @package pluscms
  * @copyright (C) 2005 impleri.net
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL

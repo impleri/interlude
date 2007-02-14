@@ -1,290 +1,381 @@
 <?php
 /***************************************************************************
- * @version $Id: class_style.php,v 1.5 2005/06/25 03:36:10 impleri Exp $
- * @package pluscms
- * @copyright (C) 2005 impleri.net
- * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ *							class_style.php
+ *							----------------
+ *	begin		: 1 January 2006
+ *	copyright	: impleri
+ *	email		: impleri@impleri.net
  *
- * begin		: Saturday, 23 April 2005
- * email		: christopher@impleri.net
- * Version		: 0.0.1 - 2005/05/20
- *
- * Plus CMS is Open Source Software
- *
- * To do : Add a way to force regeneration of all necessary templates
- *         when something in the db is updated (post, comment, etc)
+ *	Version		: 0.0.1 - 01/01/2006
  *
  ***************************************************************************/
 
-defined( '_IN_PLUS' ) or die( 'Direct Access to this location is not allowed.' );
+/***************************************************************************
+ *
+ *   This program is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation; either version 2 of the License, or
+ *   (at your option) any later version.
+ *
+ ***************************************************************************/
+
+defined( '_IN_SYS' ) or die( 'Direct Access to this location is not allowed.' );
 
 /*
- * Style class
+ * Config class
  * ------------
- * Creates and parses all data to html and outputs to screen.  Deals with templates,
- * CSS styles, imagesets, language files, etc.
+ * Config Data
  *
- * This is loosely based on pthirik's Categories Hierarchy MOD and eXtreme Styles MOD
- * for phpBB.
- *
- * Functions: style, load, loadPage, loadContainer, ContainerStyle, loadModule, read
+ * Functions: config, read
  */
- 
-class style {
 
-	var $_style;
-	var $_dir;
-	var $_css;
-	var $_images;
-	var $_tpl;
-	var $_lang;
-	var $_imgset;
-	var $_cache_root;
-	var $_cache_key;
-	var $_bodycss;
-	var $_content;
-	var $_hidden;
-	var $_type;
-	var $_totaltime;
-	var $containers;
-	var $modules;
-	var $constyles;
-	var $lang;
-	var $images;
+class style
+{
+          var $_data = array();
+          var $_files = array();
+          var $_mains = array();
+          var $compiled_code = array();
+          var $template_root;
+          var $cache_root;
+          var $_check;
+          var $main_name;
+          var $main_root;
+          var $main_prefix;
+          var $alt_name;
+          var $alt_root;
+          var $alt_prefix;
+          var $_debug;
 
-	/*
-	 * function style (Constructor)
-	 * ----------------------------
-	 * Sets up initial style info without loading files.
-	 */
-	 
-	function style()
-	{
-		global $config;
-		
-		$this->_cache_root = $config->_root . 'cache/';
-		$this->_cache_key = $config->data['cache_key'];
-		$this->_tpl = ($config->data['default_tpl']) ? $config->data['default_tpl'] : 'streaker';
-		$this->_style = ($config->data['default_style']) ? $config->data['default_style'] : 'streaker';
-		$this->_imgset = ($config->data['default_imgset']) ? $config->data['default_imgset'] : 'streaker';
-		$this->_lang = ($config->data['default_lang']) ? $config->data['default_lang'] : 'en_US';
+          function style($root='.', $alt_template_name='', $template_path='')
+          {
+                    global $config;
 
-		// Load Modules
-		$module_cached = new cache('dta_modules', $config->data['cache_style']);
-		$sql = "SELECT * FROM `%__modules`, `%__containers`
-					WHERE `sm_status`='1'
-					AND `sm_position` = `sc_name`
-					ORDER BY `sm_order`";
-		$rows = $module_cached->read($sql, 0, 'sm_id');
-		if ( !empty($rows) ) {
-			foreach($rows as $row) {
-				$this->modules->{$row['sm_position']}[$row['sm_id']] = $row;
-			}
-		}
-	
-		$this->lang = array();
-	}
+                    $this->cache_root = ($config->data['cache_path']) ? $config->data['cache_path'] : 'cache/';
+                    $this->_check = ($config->data['cache_style']) ? false : true;
+                    $this->template_root = empty($template_path) ? 'templates/' : $template_path;
 
-	/*
-	 * function load
-	 * -------------
-	 * Loads more specific style info and then loads files.
-	 */
-	 
-	 function load($containers='', $tpl='', $style='', $imgset='', $lang='')
-	{
-		global $config, $my, $modules;
-		$this->_tpl = ($tpl) ? $tpl : (($my->data['u_tpl']) ? $my->data['u_tpl'] : $this->_tpl);
-		$this->_style = ($style) ? $style : (($my->data['u_style']) ? $my->data['u_style'] : $this->_style);
-		$this->_imgset = ($imgset) ? $imgset : (($my->data['u_imgset']) ? $my->data['u_imgset'] : $this->_imgset);
-		$this->_lang = ($lang) ? $lang : (($my->data['u_lang']) ? $my->data['u_lang'] : $this->_lang);
-		$this->containers = (!empty($containers)) ? $containers : (($my->data['u_contord']) ? $my->data['u_contord'] : '');
-		$this->_dir = $config->_root . 'style/templates/' . $this->_tpl . '/';
-		$this->_css = 'http://' . $config->data['server_name'] . '/style/styles/' . $this->_style . '.css';
-		$this->_images = $config->_root . 'style/imagesets/' . $this->_imgset . '/';
-		$images = array();
-		$lang_images = array();
-		
-		if($this->containers) {
-			while(list($k, $v) = @each($this->containers)) {
-				while(list($key, $val) = @each($v)) {
-					if($this->modules->$k[$key]) {
-						$this->modules->$k[$key]->hide = $val;
-					}
-				}
-			}
-		}
-		
-		@include($this->_images . $this->_imgset . '.php');
-		@include($this->_images . $this->_lang . '.php');
-		if(empty($lang_images)) {
-			@include($this->_images . $config->data['default_lang'] . '.php');
-		}
-		if(empty($lang_images)) {
-			@include($this->_images . 'en_US.php');
-		}
-		$this->images = array_merge($images, $lang_images);
-		$lang_files = array_files('language/'.$this->_lang, 'lang');
-		foreach($lang_files as $file) {
-			include_once($config->_root . 'language/'.$this->_lang . '/' . $file);
-		}
-		$this->lang = $lang;
-		$this->_dateformat = ($my->data['u_dateformat']) ? $my->data['u_dateformat']: "D M d, Y g:i a";
-	}
-	
-	/*
-	 * function loadPage
-	 * -----------------
-	 * Gathers parsed body content, prepares containers, header, and footer,
-	 * then outputs page to screen.
-	 */
-	 
-	 function loadPage( $body, $hdrftr='1' )
-	{
-		global $config, $db;
-		
-		while(list($k, $v) = @each($body)) {
-			if($k == 'style') {
-				$this->_bodycss = '-' . $v;
-			}
-			elseif($k == 'content') {
-				$this->_content = $v;
-			}
-			elseif($k == 'frame') {
-				$file = '';
-				$sql = "SELECT * FROM `%__containers`";
-				$db->setQuery($sql);
-				$cons = $db->loadObjectList('sc_name');
-				foreach($cons as $con) {
-					$this->constyles[$con->sc_name] = $con;
-					$this->constyles[$con->sc_name]->sc_style =  ($con->sc_style) ? '-' . $con->sc_style : '-' . $con->sc_type;
-					$this->constyles[$con->sc_name]->con_type =  ($con->sc_type) ? '-' . $con->sc_type : '';
-				}
-				if(file_exists( $this->_dir . $v . '.htm' )) {
-					$frame = $this->read($v);
-				}
-				else {
-					$frame = $this->read('main_frame');
-				}
-			}
-			else {
-				message_die(_GENERAL, 'S_Template_Missing', 'D_Template_Missing', $db->_errlog);
-			}
-		}
-		include( $config->_root . 'extensions/header.php');
-		include( $config->_root . 'extensions/footer.php');
-		echo $header . $frame . $footer;
-		return;
-	}
-	
-	/*
-	 * function loadContainer
-	 * ----------------------
-	 * Takes $container, loads its modules, and returns to the HTML. 
-	 */
-	 
-	 function loadContainer( $container )
-	{
-		unset($this->parse);
-		while(list($k, $v) = @each($this->modules->$container)) {
-			$this->parse[$k] = $this->modules->{$container}[$k];
-		}
-		if($this->parse) {
-			$file = ($this->constyles[$container]->sc_type) ? $this->constyles[$container]->sc_type . '_box' : 'v_box';
-			echo $this->read($file);
-		} else {
-			echo $this->read('overall_body');
-		}
-		return;
-	}
-	
-	/*
-	 * function loadModule
-	 * -------------------
-	 * Takes $module, loads it, and if enabled, caches it. Also sets the 
-	 * CSS suffix to $style.
-	 */
-	 
-	 function loadModule( $module )
-	{
-		global $config;
-		if(file_exists($config->_root . 'modules/' . $module['sm_filename'] . '.php')) {
-			$this->_here = $module;
-			echo $this->read($module['sm_filename'], '', $module['sm_id'], $module['sm_cache']);
-		}
-		else {
-			message_die(_GENERAL, 'S_Template_Missing', 'D_Template_Missing', $db->_errlog);
-		}
-		return;
-	}
-	
-	/*
-	 * function read
-	 * --------------
-	 * Attempts to read HTML from cache.  Ends if successful.  Otherwise,
-	 * executes $query, parses $filename, and, if cache is enabled, writes
-	 * to cache file.
-	 */
-	 
-	function read($filename, $query='', $item='', $cache_enabled=false)
-	{
-		global $db, $config, $my, $seesion, $auths, $module;
-		
-		$data = null;
-		if($query != '') {
-			if ( $config->data['enable_cache'] && $cache_enabled ) {
-				@include($this->_cache_root.$this->_tpl.'.'.$this->_lang.'.'.$filename.'.'.$item.'.php');
-				@include($this->_cache_root.$this->_tpl.'.'.$this->_lang.'.'.$filename.'.php');
-				if (!empty($gentime) && $cache_key == $config->data['cache_key']) {
-					if($gentime > (time() - $config->data['recache_tpl'])) {
-						if ($db->_debug == 2) {
-							$db->_log[] = "SQL Query:<br /> <span style=\"color:#ff0000\">(cached)</span><br />" . $sql;
-						}
-						return stripslashes($data);
-					}
-				}
-			}
-			$db->setQuery($query);
-			$sql = $db->_query;
-			if (!($rows = $db->loadObjectList())) {
-				message_die(_GENERAL, 'S_Template_Missing', 'D_Template_Missing', $db->_errlog);
-			}
-		}
-		ob_start();
-		if(@file_exists($config->_root . 'modules/' . $filename . '.php')) {
-			@include($config->_root . 'modules/' . $filename . '.php');
-		}
-		elseif(@file_exists($this->_dir . $filename . '.htm')) {
-			@include($this->_dir . $filename . '.htm');
-		}
-		else {
-			message_die(_GENERAL, $filename, 'D_Template_Missing', $db->_errlog);
-		}
-		$data = addslashes(ob_get_clean());
-		if ( !$config->data['enable_cache'] || !$cache_enabled ) {
-			return stripslashes($data);
-		}
-		$fmt_file = '<' . "?php\n" . 
-		"// Generated : %s (GMT)\n" . 
-		'$gentime = %s;'."\n" . 
-		'$cache_key = \'%s\';'."\n" .
-		'$sql = \'%s\';'."\n" . 
-		'$data = "%s";'."\n" . 
-		'?' . '>';
-		
-		if($item) {
-			$handle = @fopen($this->_cache_root.$this->_tpl.'.'.$this->_lang.'.'.$filename.'.'.$item.'.php', 'w');
-		} else {
-			$handle = @fopen($this->_cache_root.$this->_tpl.'.'.$this->_lang.'.'.$filename.'.php', 'w');
-		}
-		@flock($handle, LOCK_EX);
-		@fwrite($handle, sprintf($fmt_file, date('Y-m-d H:i:s'), time(), $this->_cache_key, $sql, $data));
-		@flock($handle, LOCK_UN);
-		@fclose($handle);
-		@umask(0000);
-		@chmod($handle, 0666);
-		return stripslashes($data);
-	}
-} // END class style
+                    $this->set($root, $alt_template_name);
+
+                    $this->_debug = false;
+          }
+
+          function set($root, $alt_template_name)
+          {
+                    global $config;
+
+                    $this->root_template = $config->root . $this->template_path;
+
+                    // get main template settings
+                    $this->template_name = str_replace('//', '/', str_replace('./', '', substr($root, strlen($this->root_template))) . '/');
+                    $this->root = $this->root_template . $this->template_name;
+                    $this->cacheprefix = $config->root . $this->cache_path . 'tpl_' . str_replace('/', '_', $this->template_name);
+
+                    // get custom tpls settings
+                    $this->alt_template_name = $this->tpl_realpath($alt_template_name);
+                    $this->alt_root = empty($this->alt_template_name) ? '' : $this->root_template . $this->alt_template_name;
+                    $this->alt_cacheprefix = empty($this->alt_template_name) ? '' : $config->root . $this->cache_path . 'tpl_' . str_replace('/', '_', $this->alt_template_name);
+
+                    // raz
+                    $this->_tpldata = array();
+          }
+
+          function tpl_realpath($tpl_name)
+          {
+                    global $config;
+
+                    if ( !empty($tpl_name) )
+                    {
+                              $real_path = phpbb_realpath($this->root);
+                              if ( $real_path != $this->root)
+                              {
+                                        $tpl_real_path = phpbb_realpath($this->root . $tpl_name);
+                                        if ( empty($tpl_real_path) )
+                                        {
+                                                  $tpl_name = '';
+                                        }
+                                        else
+                                        {
+                                                  $root_real_path = phpbb_realpath($this->root_template);
+                                                  $tpl_name = str_replace('//', '/', str_replace('\\', '/', substr($tpl_real_path, strlen($root_real_path)+1)) . '/');
+                                        }
+                              }
+                              // phpbb_realpath fails to get the real path sometime (when not available), so find another way
+                              else
+                              {
+                                        $res = $this->template_name;
+                                        if ( substr($tpl_name, 0, 2) == './' )
+                                        {
+                                                  $tpl_name = substr($tpl_name, 2);
+                                        }
+                                        if ( substr($tpl_name, 0, 3) == '../' )
+                                        {
+                                                  $res = '';
+                                                  $tpl_name = substr($tpl_name, 3);
+                                        }
+                                        if ( preg_match('/\.\.\//', $tpl_name) )
+                                        {
+                                                  $tpl_name = '';
+                                        }
+                                        else
+                                        {
+                                                  $tpl_name = str_replace('//', '/', str_replace('./', '', $res . $tpl_name) . '/');
+                                        }
+                              }
+                    }
+                    return $tpl_name;
+          }
+
+          function set_switch($switch_name, $value=true)
+          {
+                    $this->assign_block_vars($switch_name . ($value ? '' : '_ELSE'), array());
+          }
+
+          function save(&$save)
+          {
+                    $save = $this->_tpldata;
+          }
+
+          function destroy()
+          {
+                    $this->_tpldata = array();
+          }
+
+          function restore(&$save)
+          {
+                    $this->_tpldata = $save;
+          }
+
+          function get_pparse($handle)
+          {
+                    ob_start();
+                    $this->pparse($handle);
+                    $res = ob_get_contents();
+                    ob_end_clean();
+                    return $res;
+          }
+
+          // Sets the template filenames for handles. $filename_array
+          // should be a hash of handle => filename pairs.
+          function set_filenames($filename_array)
+          {
+                    if ( !is_array($filename_array) )
+                    {
+                              return false;
+                    }
+
+                    $template_names = '';
+                    foreach ($filename_array as $handle => $filename)
+                    {
+                              if ( empty($filename) )
+                              {
+                                        message_die(GENERAL_ERROR, 'template error - Empty filename specified for ' . $handle, '', __LINE__, __FILE__);
+                              }
+
+                              $this->filename[$handle] = $filename;
+                              if ( !empty($this->alt_root) )
+                              {
+                                        $this->files[$handle] = $this->alt_root . $filename;
+                              }
+
+                              // doesn't exists : try the main
+                              if ( !$this->mains[$handle] = (!empty($this->alt_root) && file_exists($this->files[$handle])) )
+                              {
+                                        $this->files[$handle] = $this->root . $filename;
+                                        $this->mains[$handle] = false;
+                              }
+                    }
+
+                    return true;
+          }
+
+          function make_filename($filename)
+          {
+                    return !empty($this->alt_root) && file_exists($this->alt_root . $filename) ?  $this->alt_root . $filename : (file_exists($this->root . $filename) ? $this->root . $filename : '');
+          }
+
+          // Methods for loading and evaluating the templates
+          function pparse($handle)
+          {
+                    global $user;
+                    $this->no_debug = $this->no_debug || !is_object($user) || ($user->data['user_level'] != ADMIN);
+
+                    if ( defined('DEBUG_TEMPLATE') && !$this->no_debug )
+                    {
+                              echo '<!-- Start of : ' . $this->files[$handle] . ' :: ' . $handle . ' -->' . "\n";
+                    }
+                    if ($filename = $this->_tpl_load($handle))
+                    {
+                              include($filename);
+                    }
+                    else
+                    {
+                              eval(' ?>' . $this->compiled_code[$handle] . '<?php ');
+                    }
+                    if ( defined('DEBUG_TEMPLATE') && !$this->no_debug )
+                    {
+                              echo '<!-- End of : ' . $this->files[$handle] . ' :: ' . $handle . ' -->' . "\n";
+                    }
+
+                    return true;
+          }
+
+          function assign_var_from_handle($varname, $handle)
+          {
+                    return $this->assign_vars(array($varname => $this->get_pparse($handle)));
+          }
+
+          // Load a compiled template if possible, if not, recompile it
+          function _tpl_load($handle)
+          {
+                    global $config, $user, $db;
+
+                    // If we don't have a file assigned to this handle, die.
+                    if ( !isset($this->files[$handle]) )
+                    {
+                              message_die(GENERAL_ERROR, 'template->_tpl_load(): No file specified for handle ' . $handle, '', __LINE__, __FILE__);
+                    }
+
+                    // get the file name
+                    $w_filename = str_replace('/', '_', $this->filename[$handle]);
+                    $filename = ($this->mains[$handle] ? $this->alt_cacheprefix : $this->cacheprefix) . $w_filename . '.' . $config->ext;
+
+                    // Recompile page if the original template is newer, otherwise load the compiled version
+                    if ( !empty($this->compiled_code[$handle]) )
+                    {
+                              return false;
+                    }
+                    else if ( $config->data['cache_style'] && @file_exists($filename) && (!$this->_check || (@filemtime($filename) > @filemtime($this->files[$handle]))) )
+                    {
+                              return $filename;
+                    }
+                    else
+                    {
+                              $this->_tpl_load_file($handle);
+                    }
+                    return false;
+          }
+
+          // Load template source from file
+          function _tpl_load_file($handle)
+          {
+                    global $config;
+
+                    // Try and open template for read
+                    if (!($fp = @fopen($this->files[$handle], 'r')))
+                    {
+                              message_die(GENERAL_ERROR, 'template->_tpl_load(): File ' . $this->files[$handle] . ' does not exist or is empty', '', __LINE__, __FILE__);
+                    }
+
+                    // compile required
+                    include_once($config->url('includes/class_compiler'));
+                    $compiler = new compiler();
+                    $this->compiled_code[$handle] = $compiler->compile(trim(@fread($fp, filesize($this->files[$handle]))));
+                    @fclose($fp);
+
+                    // output the template to the cache
+                    if ( $config->data['cache_template'] )
+                    {
+                              $filename = ($this->mains[$handle] ? $this->alt_cacheprefix : $this->cacheprefix) . str_replace('/', '_', $this->filename[$handle]) . '.' . $config->ext;
+                              $compiler->compile_write($handle, $this->compiled_code[$handle], $filename);
+                    }
+                    unset($compiler);
+          }
+
+          // Assign key variable pairs from an array
+          function assign_vars($vararray)
+          {
+                    $this->_tpldata['.'][0] = array_merge(empty($this->_tpldata['.'][0]) ? array() : $this->_tpldata['.'][0], $vararray);
+                    return true;
+          }
+
+          // Assign key variable pairs from an array to a specified block
+          function assign_block_vars($blockname, $vararray)
+          {
+                    if (strstr($blockname, '.'))
+                    {
+                              // Nested block.
+                              $blocks = explode('.', $blockname);
+                              $blockcount = sizeof($blocks) - 1;
+
+                              $str = &$this->_tpldata; 
+                              for ($i = 0; $i < $blockcount; $i++) 
+                              {
+                                        $str = &$str[$blocks[$i]]; 
+                                        $str = &$str[sizeof($str) - 1]; 
+                              }
+                              $str[$blocks[$blockcount]][] = $vararray;
+                    }
+                    else
+                    {
+                              $this->_tpldata[$blockname][] = $vararray;
+                    }
+
+                    return true;
+          }
+
+          function assign_lastblock_vars($blockname, $vararray)
+          {
+                    if ( strstr($blockname, '.') )
+                    {
+                              $blocks = explode('.', $blockname);
+                              $blockcount = sizeof($blocks);
+
+                              $str = &$this->_tpldata; 
+                              for ($i = 0; $i < $blockcount; $i++) 
+                              {
+                                        $str = &$str[ $blocks[$i] ];
+                                        $str = &$str[ sizeof($str) - 1 ];
+                              }
+                    }
+                    else
+                    {
+                              $str = &$this->_tpldata[$blockname];
+                              $str = &$str[ sizeof($str) - 1 ];
+                    }
+                    $str = array_merge($str, $vararray);
+                    return true;
+          }
+
+          function unset_block_vars($blockname)
+          {
+                    // find the block (last iteration)
+                    if ( strstr($blockname, '.') )
+                    {
+                              $blocks = explode('.', $blockname);
+                              $blockcount = sizeof($blocks) - 1;
+
+                              $str = &$this->_tpldata; 
+                              for ($i = 0; $i < $blockcount; $i++) 
+                              {
+                                        $str = &$str[ $blocks[$i] ];
+                                        $str = &$str[ sizeof($str) - 1 ];
+                              }
+                              if ( isset($str[ $blocks[$blockcount] ]) )
+                              {
+                                        unset($str[ $blocks[$blockcount] ]);
+                                        return true;
+                              }
+                    }
+                    else
+                    {
+                              if ( isset($this->_tpldata[$blockname]) )
+                              {
+                                        unset($this->_tpldata[$blockname]);
+                                        return true;
+                              }
+                    }
+                    return false;
+          }
+
+          // Include a seperate template
+          function _tpl_include($filename)
+          {
+                    if ( !empty($filename) )
+                    {
+                              $this->set_filenames(array($filename => $filename));
+                              $this->pparse($filename);
+                    }
+          }
+}
 
 ?>

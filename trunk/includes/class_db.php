@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************
- * @version $Id: class_db.php,v 1.7 2005/06/25 03:36:10 impleri Exp $
+ * @version $Id: class_db.php,v 1.6 2005/06/22 03:11:48 impleri Exp $
  * @package pluscms
  * @copyright (C) 2005 impleri.net
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL

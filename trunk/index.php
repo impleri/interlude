@@ -1,15 +1,21 @@
 <?php
 /***************************************************************************
- * @version $Id: index.php,v 1.6 2005/06/25 03:36:08 impleri Exp $
- * @package pluscms
- * @copyright (C) 2005 impleri.net
- * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ *							 index.php
+ *							----------------
+ *	begin		: 1 January 2006
+ *	copyright	: impleri
+ *	email		: impleri@impleri.net
  *
- * begin		: Saturday, 23 April 2005
- * email		: christopher@impleri.net
- * Version		: 0.0.1 - 2005/05/20
+ *	version	: 0.0.1 - 01/01/2006
  *
- * Plus CMS is Open Source Software
+ ***************************************************************************/
+
+/***************************************************************************
+ *
+ *   This program is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation; either version 2 of the License, or
+ *   (at your option) any later version.
  *
  ***************************************************************************/
 
