@@ -1,0 +1,163 @@
+##############################################################
+##
+## Plus CMS Notes
+## Author: impleri < christopher@impleri.net > (Christopher Roussel) http://demo.impleri.net
+##
+##############################################################
+                                                          
+                      ###      #           #        #     
+                       #  ##  ### ### ###  #  # # ### ### 
+                       #  # #  #  ##  #    #  # # # # ##  
+                       #  # #  ## ### #    ## ### ### ### 
+                      ###                                 
+
+##### Requirements #####
+**PHP 4.1.0
+**MySQL 4.0.x
+**GD Library 2.0
+**A Better Name
+
+##### Recommended #####
+**PHP 5.x
+**MySQL 5.x
+** ImageMagick
+
+
+##### Notes #####
+
+Gallery 
+CMS
+Forums
+Blogs
+Wiki
+Repository
+Messaging 
+Modularized add-ons
+Multi-languages
+Full Modular Templates (i.e. no HTML in PHP scripts)
+Comments
+Polls
+File attachments
+Reports/Flags
+Word Censors
+Customizable BBCode
+Moderator/Admin Logging
+Visitor Stats Logging
+Search Logs (connected to registered users to review past searches)
+Rules/FAQs
+Caching
+WYSIWYG Posting
+Watch-Anything
+Syndication
+SEO
+Auths
+XML-RPC
+
+##### Installation #####
+
+**Upload the schema in /docs/ (the only other file in this
+ directory!) through phpMyAdmin.
+**Copy the PHP files to a working directory.
+**In the plus_config table, change the server name to match where you
+ put the PHP files.  
+**Edit config.php to reflect your database info.  
+**Have fun.
+
+##### Processing #####
+index.php?ext=EXTENSION&act=ACTION
+include common
+include config
+include EXTENSION common
+if (include EXTENSION ACTION)
+{
+	generate page
+}
+else
+{
+	error
+}
+session
+output
+
+##### Extending  #####
+Package:
+extensions/ADDON/*.*
+includes/_cp_patches/Xcp_ADDON.php
+language/LANG/lang_ADDON.php
+styles/templates/TEMPLATE/*.htm
+
+##### Templating #####
+
+General Template Files Schema:
+*_header.htm = Page Header
+*_script.htm = JavaScript for particular body/frame
+*_frame.htm = Body Frame (e.g. Blog Framing, Forums Framing)
+*_top.htm = Content Top/Left
+*_body.htm = Content Box (e.g. Blog Post, Forum topic view, Forum forum view)
+*_list.htm = Listings (e.g. Memberlist, Blog List, etc)
+*_box.htm = Item Box for list/body (e.g. Topic Row, Forum Row, Blog Entry)
+*_bottom.htm = Content Right/Bottom
+*_footer.htm = Page Footer
+
+So that a view forum page (with 2 sub-forums and 4 topics) will be created as such:
+
+======================================================================================================
+|                                        FORUM_HEADER.HTM                                            |
+|                                                                                                    |
+|                                           >  FORUM_SCRIPT.HTM <                                    |
+|----------------------------------------------------------------------------------------------------|
+|                                        FORUM_FRAME.HTM                                             |
+|                                                                                                    |
+|                                           > FORUM_TOP.HTM <                                        |
+|                                                                                                    |
+|                                                >> FORUM_NAV_BOX.HTM <<                             |
+|                                                                                                    |
+|                                           > FORUM_BODY.HTM <                                       |
+|                                                                                                    |
+|                                                >> FORUM_LIST.HTM <<                                |
+|                                                   >>> FORUM_LIST_BOX.HTM <<<                       |
+|                                                   >>> FORUM_LIST_BOX.HTM <<<                       |
+|                                                                                                    |
+|                                                >> FORUM_VIEW_BOX.HTM <<                            |
+|                                                   >>> TOPIC_LIST_BOX.HTM <<<                       |
+|                                                   >>> TOPIC_LIST_BOX.HTM <<<                       |
+|                                                   >>> TOPIC_LIST_BOX.HTM <<<                       |
+|                                                   >>> TOPIC_LIST_BOX.HTM <<<                       |
+|                                                                                                    |
+|                                           > FORUM_BOTTOM.HTM <                                     |
+|                                                                                                    |
+|                                                >> FORUM_STATS_BOX.HTM <<                           |
+|----------------------------------------------------------------------------------------------------|
+|                                        FORUM_FOOTER.HTM                                            |
+======================================================================================================
+
+and a view blog page (with 4 posts) will be created as such:
+
+======================================================================================================
+|                                        BLOG_HEADER.HTM                                             |
+|                                                                                                    |
+|                                           >  BLOG_SCRIPT.HTM <                                     |
+|----------------------------------------------------------------------------------------------------|
+|                                        BLOG_FRAME.HTM                                              |
+|                                                                                                    |
+|                                           > BLOG_TOP.HTM <                                         |
+|                                                                                                    |
+|                                                >> BLOG_NAV_BOX.HTM <<                              |
+|                                                                                                    |
+|                                           > BLOG_BODY.HTM <                                        |
+|                                                                                                    |
+|                                                >> BLOG_VIEW_BOX.HTM <<                             |
+|                                                >> BLOG_VIEW_BOX.HTM <<                             |
+|                                                >> BLOG_VIEW_BOX.HTM <<                             |
+|                                                >> BLOG_VIEW_BOX.HTM <<                             |
+|                                                                                                    |
+|                                           > BLOG_BOTTOM.HTM <                                      |
+|                                                                                                    |
+|                                                >> BLOG_STATS_BOX.HTM <<                            |
+|----------------------------------------------------------------------------------------------------|
+|                                        BLOG_FOOTER.HTM                                             |
+======================================================================================================
+
+NOTES:
+    (1) > < imply layers of nesting.
+	(2) This sketching is very simplified.
