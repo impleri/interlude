@@ -1,13 +1,17 @@
-<?php 
+﻿<?php 
 // auto-generated config
-// do not change anything in this file!
-defined( '_IN_PLUS' ) or die( 'Direct Access to this location is not allowed.' );
+defined( '_PLAY_MUSIC' ) or die('Inquiring minds do not get to know.');
 
-$config->_host = 'localhost';
-$config->_user = 'impleri_plus';
-$config->_pw = 'nothing';
-$config->_db = 'impleri_plus';
-$config->_prefix = 'plus_';
-$config->_debug = 2;
+$il_host = "localhost";
+$il_user = "interlude";
+$il_pw = "test";
+$il_db = "interlude";
+$il_prefix = "il_";
+$il_root = "C:/Program Files/xampp/htdocs/interlude/";
+
 define('_INSTALLED', true);
+//define('_DEBUG', true);
+//define('_DEBUG_ADMIN', true);
+//define('_DEBUG_SCRIPT', true);
+//define('_DEBUG_TEMPLATE', true);
 ?>

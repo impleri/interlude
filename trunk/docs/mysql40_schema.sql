@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 -- 
 -- Host: localhost
--- Generation Time: Jun 24, 2005 at 10:22 PM
+-- Generation Time: Jun 21, 2005 at 10:01 PM
 -- Server version: 4.1.10
 -- PHP Version: 4.3.10
 -- 
@@ -191,13 +191,13 @@ CREATE TABLE `plus_comments` (
 -- 
 
 CREATE TABLE `plus_config` (
-  `sc_name` varchar(255) NOT NULL default '',
-  `sc_value` varchar(255) NOT NULL default '',
-  `sc_static` tinyint(1) NOT NULL default '1',
-  `sc_override` tinyint(1) NOT NULL default '0',
-  PRIMARY KEY  (`sc_name`),
-  KEY `config_static` (`sc_static`),
-  KEY `config_override` (`sc_override`)
+  `c_name` varchar(255) NOT NULL default '',
+  `c_value` varchar(255) NOT NULL default '',
+  `c_static` tinyint(1) NOT NULL default '0',
+  `c_override` tinyint(1) NOT NULL default '0',
+  PRIMARY KEY  (`c_name`),
+  KEY `config_static` (`c_static`),
+  KEY `config_override` (`c_override`)
 ) TYPE=MyISAM;
 
 -- 
@@ -240,7 +240,7 @@ INSERT INTO `plus_config` VALUES ('board_email_form', '0', 1, 0);
 INSERT INTO `plus_config` VALUES ('avatar_filesize', '6144', 1, 0);
 INSERT INTO `plus_config` VALUES ('avatar_max_width', '80', 1, 0);
 INSERT INTO `plus_config` VALUES ('avatar_max_height', '80', 1, 0);
-INSERT INTO `plus_config` VALUES ('default_style', 'streaker', 1, 0);
+INSERT INTO `plus_config` VALUES ('default_style', '1', 1, 0);
 INSERT INTO `plus_config` VALUES ('default_dateformat', 'D M d, Y g:i a', 1, 0);
 INSERT INTO `plus_config` VALUES ('board_timezone', '0', 1, 0);
 INSERT INTO `plus_config` VALUES ('prune_enable', '1', 1, 0);
@@ -279,7 +279,7 @@ INSERT INTO `plus_config` VALUES ('cache_time_g', '1115532901', 1, 0);
 INSERT INTO `plus_config` VALUES ('cache_time_fjbox', '1115434249', 1, 0);
 INSERT INTO `plus_config` VALUES ('stats_display_past', '1', 1, 0);
 INSERT INTO `plus_config` VALUES ('version_check_delay', '1116033444', 1, 0);
-INSERT INTO `plus_config` VALUES ('enable_seo', '0', 1, 0);
+INSERT INTO `plus_config` VALUES ('enable_seo', '1', 1, 0);
 INSERT INTO `plus_config` VALUES ('log_user_ip_action_url', 'http://network-tools.com/default.asp?host=', 1, 0);
 INSERT INTO `plus_config` VALUES ('announcement_date_display', '1', 0, 0);
 INSERT INTO `plus_config` VALUES ('announcement_display', '1', 0, 0);
@@ -289,37 +289,6 @@ INSERT INTO `plus_config` VALUES ('announcement_forum', '1', 0, 0);
 INSERT INTO `plus_config` VALUES ('announcement_duration', '7', 0, 0);
 INSERT INTO `plus_config` VALUES ('announcement_prune_strategy', '0', 0, 0);
 INSERT INTO `plus_config` VALUES ('announcement_last_prune', '1116219599', 0, 0);
-INSERT INTO `plus_config` VALUES ('cache_style', '1', 1, 0);
-
--- --------------------------------------------------------
-
--- 
--- Table structure for table `plus_containers`
--- 
-
-CREATE TABLE `plus_containers` (
-  `sc_id` int(8) NOT NULL auto_increment,
-  `sc_name` varchar(20) NOT NULL default '',
-  `sc_type` char(1) NOT NULL default 'v',
-  `sc_style` varchar(20) NOT NULL default '',
-  PRIMARY KEY  (`sc_id`),
-  UNIQUE KEY `sc_name` (`sc_name`)
-) TYPE=MyISAM;
-
--- 
--- Dumping data for table `plus_containers`
--- 
-
-INSERT INTO `plus_containers` VALUES (1, 'left', 'v', '');
-INSERT INTO `plus_containers` VALUES (2, 'right', 'v', '');
-INSERT INTO `plus_containers` VALUES (3, 'top', 'h', '');
-INSERT INTO `plus_containers` VALUES (4, 'search', 'h', '');
-INSERT INTO `plus_containers` VALUES (5, 'user1', 'v', '');
-INSERT INTO `plus_containers` VALUES (6, 'user2', 'v', '');
-INSERT INTO `plus_containers` VALUES (7, 'banner', 'h', '');
-INSERT INTO `plus_containers` VALUES (8, 'logo', 'v', '');
-INSERT INTO `plus_containers` VALUES (9, 'newsflash', 'h', '');
-INSERT INTO `plus_containers` VALUES (10, 'user3', 'h', '');
 
 -- --------------------------------------------------------
 
@@ -464,12 +433,8 @@ CREATE TABLE `plus_modules` (
   `sm_author` varchar(50) NOT NULL default '',
   `sm_filename` varchar(20) NOT NULL default '',
   `sm_position` varchar(20) NOT NULL default '',
-  `sm_header` tinyint(1) NOT NULL default '1',
-  `sm_style` varchar(10) NOT NULL default '',
-  `sm_order` int(8) NOT NULL default '1000',
-  `sm_cache` tinyint(1) NOT NULL default '1',
+  `sm_order` int(8) NOT NULL default '0',
   `sm_iscore` tinyint(1) NOT NULL default '0',
-  `sm_params` text NOT NULL,
   PRIMARY KEY  (`sm_id`),
   KEY `module_status` (`sm_status`),
   KEY `module_name` (`sm_name`),
@@ -480,10 +445,6 @@ CREATE TABLE `plus_modules` (
 -- Dumping data for table `plus_modules`
 -- 
 
-INSERT INTO `plus_modules` VALUES (1, 'Main Menu', 'Primary Menu', 1, 'Christopher Roussel', 'mod_menu', 'left', 1, 'mainmenu', 10, 1, 0, '');
-INSERT INTO `plus_modules` VALUES (2, 'Search', 'Search function.', 1, 'Christopher Roussel', 'mod_search', 'search', 0, 'search', 10, 1, 0, '');
-INSERT INTO `plus_modules` VALUES (3, 'Top Menu', 'Header Menu', 1, '', 'mod_menu', 'top', 0, '', 10, 1, 0, '');
-INSERT INTO `plus_modules` VALUES (4, 'Who''s Online', 'Displays who is online.', 1, '', 'mod_online', 'right', 1, '', 10, 1, 0, '');
 
 -- --------------------------------------------------------
 
@@ -652,7 +613,7 @@ CREATE TABLE `plus_sessions` (
 -- Dumping data for table `plus_sessions`
 -- 
 
-INSERT INTO `plus_sessions` VALUES ('d1d7c30fd6bef2bdc0532e2e96fa7225', -1, 1119659130, 1119669478, '7f000001', -31, 0, 0);
+INSERT INTO `plus_sessions` VALUES ('4b2f5d695edac2eb63695155d9699f4e', -1, 1119407357, 1119409165, '7f000001', -31, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -815,7 +776,7 @@ CREATE TABLE `plus_users` (
 -- 
 
 INSERT INTO `plus_users` VALUES (-1, 0, 'guest', 'Anonymous', '', 0, 0, 0, 0, 0, 0.00, '', '0', '0', NULL, 'd M Y H:i', 0, 0, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `plus_users` VALUES (2, 1, 'admin', 'Administrator', '3e47b75000b0924b6c9ba5759a7cf15d', 0, 0, 1119479800, 0, 0, 0.00, 'streaker', 'streaker', 'streaker', 'en_UK', 'd M Y H:i', 0, 0, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, NULL, 0, 'admin@impleri.net', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+INSERT INTO `plus_users` VALUES (2, 1, 'admin', 'Administrator', '3e47b75000b0924b6c9ba5759a7cf15d', 0, 0, 1119396191, 0, 0, 0.00, 'streaker', 'streaker', 'streaker', 'en_UK', 'd M Y H:i', 0, 0, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, NULL, 0, 'admin@impleri.net', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO `plus_users` VALUES (3, 1, 'joemama', 'Joe Mama', 'niosgheriohas', 0, 0, 0, 0, 0, 0.00, '', '', '', NULL, 'd M Y H:i', 0, 0, NULL, NULL, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, NULL, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------

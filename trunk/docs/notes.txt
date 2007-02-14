@@ -1,230 +1,163 @@
 ##############################################################
 ##
 ## Plus CMS Notes
-## Author: impleri < christopher@impleri.net > 
-##  (Christopher Roussel) http://demo.impleri.net
-## Updated : 25 June 2005 0430 GMT
+## Author: impleri < christopher@impleri.net > (Christopher Roussel) http://demo.impleri.net
 ##
 ##############################################################
+                                                          
+                      ###      #           #        #     
+                       #  ##  ### ### ###  #  # # ### ### 
+                       #  # #  #  ##  #    #  # # # # ##  
+                       #  # #  ## ### #    ## ### ### ### 
+                      ###                                 
 
 ##### Requirements #####
 **PHP 4.1.0
 **MySQL 4.0.x
+**GD Library 2.0
 **A Better Name
+
+##### Recommended #####
+**PHP 5.x
+**MySQL 5.x
+** ImageMagick
+
 
 ##### Notes #####
 
-Ultimately, the package will include a fully functioning albums
-gallery (similar to Gallery/Coppermine) possibly with access to
-online digital printing services (as Gallery has), fully functioning
-CMS engine (similar to Mambo/Drupal), fully functioning forums
-(similar to phpBB/SMF), fully functioning multi-user multi-blog
-engine (similar to b2evo/Nucleus), a fully functioning Wiki engine 
-(similar to MediaWiki/WikiPedia), a fully functioning Repository
-system.  Also, there will be an embedded messaging system, users/groups 
-auths system, usergroups, modularized add-on system (like 
-Mambo/Drupal), multi-language support with UK and US English included 
-(i'd also add German, but i'm too afraid my German's too rusty!), 
-modular templating system such that imagesets, CSS files, and actual 
-HTML templates are separated in a mix-and-match system that can be 
-changed per-user and per-extension, CSS class declarations that are 
-customizable per-container and  per-module, commenting system, 
-voting/poll system, a file attachment system (for use outside the 
-Repository), a report/flag system, an intelligent word censor system,
-customizable BBCode system, moderator and admin Logging, visitor stats
-logging, search logs (also connected to the registered user so that
-they can review past searches), a rules and FAQ engine (similar to
-phpBB's), a cache system, a WYSIWYG posting editor, and a 
-watch-anything system, plus more.
-
-##### Current Resources #####
-
-Galleries: Coppermine, Gallery, Gallery2
-CMS: Mambo
-Nuke: Dragonfly, Drupal, Exponent, phpNuke, PostNuke, Xoops
-Wiki: MediaWiki, phpWiki, Xaraya
-Blogs: Nucleus, WordPress, LiveJournal
-Forums: phpBB2, phpBB3, Simple Machines Forums, UnClassified
- NewsBoards
-
-If you know of another system that is *Open Source* (yes, that's a
-requirement) and has some feature not already covered in the above, 
-email me a link to the homepage, and i will check it out.
+Gallery 
+CMS
+Forums
+Blogs
+Wiki
+Repository
+Messaging 
+Modularized add-ons
+Multi-languages
+Full Modular Templates (i.e. no HTML in PHP scripts)
+Comments
+Polls
+File attachments
+Reports/Flags
+Word Censors
+Customizable BBCode
+Moderator/Admin Logging
+Visitor Stats Logging
+Search Logs (connected to registered users to review past searches)
+Rules/FAQs
+Caching
+WYSIWYG Posting
+Watch-Anything
+Syndication
+SEO
+Auths
+XML-RPC
 
 ##### Installation #####
 
 **Upload the schema in /docs/ (the only other file in this
- directory!) through MySQL.
+ directory!) through phpMyAdmin.
 **Copy the PHP files to a working directory.
 **In the plus_config table, change the server name to match where you
  put the PHP files.  
 **Edit config.php to reflect your database info.  
 **Have fun.
 
-##### Primary Coding Foci #####
-Auths system
-Admin panel
+##### Processing #####
+index.php?ext=EXTENSION&act=ACTION
+include common
+include config
+include EXTENSION common
+if (include EXTENSION ACTION)
+{
+	generate page
+}
+else
+{
+	error
+}
+session
+output
 
-##### Secondary Foci #####
-Extensions (including posting and error pages)
-Modules
-Streamlining Templating and Caching systems
-RSS Feeds
+##### Extending  #####
+Package:
+extensions/ADDON/*.*
+includes/_cp_patches/Xcp_ADDON.php
+language/LANG/lang_ADDON.php
+styles/templates/TEMPLATE/*.htm
 
-##### Tertiary Foci #####
-Moderator panel
-User Panel/Preferences
-Registration system
-Extension panels (such as blog panel)
-XML input (w.Bloggar compatibility)
+##### Templating #####
 
-##### Dead Last Foci #####
-Content Reporting
-Word Censoring
-Styling/Language
-BBCode/WYSIWYG boxes
-Smilies
-Collapsable Modules
-SQL/HTML safe input/output (i.e. quotation marks)
+General Template Files Schema:
+*_header.htm = Page Header
+*_script.htm = JavaScript for particular body/frame
+*_frame.htm = Body Frame (e.g. Blog Framing, Forums Framing)
+*_top.htm = Content Top/Left
+*_body.htm = Content Box (e.g. Blog Post, Forum topic view, Forum forum view)
+*_list.htm = Listings (e.g. Memberlist, Blog List, etc)
+*_box.htm = Item Box for list/body (e.g. Topic Row, Forum Row, Blog Entry)
+*_bottom.htm = Content Right/Bottom
+*_footer.htm = Page Footer
 
-##### Very Last Focus #####
-Installation (sorry!)
+So that a view forum page (with 2 sub-forums and 4 topics) will be created as such:
 
+======================================================================================================
+|                                        FORUM_HEADER.HTM                                            |
+|                                                                                                    |
+|                                           >  FORUM_SCRIPT.HTM <                                    |
+|----------------------------------------------------------------------------------------------------|
+|                                        FORUM_FRAME.HTM                                             |
+|                                                                                                    |
+|                                           > FORUM_TOP.HTM <                                        |
+|                                                                                                    |
+|                                                >> FORUM_NAV_BOX.HTM <<                             |
+|                                                                                                    |
+|                                           > FORUM_BODY.HTM <                                       |
+|                                                                                                    |
+|                                                >> FORUM_LIST.HTM <<                                |
+|                                                   >>> FORUM_LIST_BOX.HTM <<<                       |
+|                                                   >>> FORUM_LIST_BOX.HTM <<<                       |
+|                                                                                                    |
+|                                                >> FORUM_VIEW_BOX.HTM <<                            |
+|                                                   >>> TOPIC_LIST_BOX.HTM <<<                       |
+|                                                   >>> TOPIC_LIST_BOX.HTM <<<                       |
+|                                                   >>> TOPIC_LIST_BOX.HTM <<<                       |
+|                                                   >>> TOPIC_LIST_BOX.HTM <<<                       |
+|                                                                                                    |
+|                                           > FORUM_BOTTOM.HTM <                                     |
+|                                                                                                    |
+|                                                >> FORUM_STATS_BOX.HTM <<                           |
+|----------------------------------------------------------------------------------------------------|
+|                                        FORUM_FOOTER.HTM                                            |
+======================================================================================================
 
-########## Currently Working Systems Info ##########
+and a view blog page (with 4 posts) will be created as such:
 
-##### Initialisation #####
+======================================================================================================
+|                                        BLOG_HEADER.HTM                                             |
+|                                                                                                    |
+|                                           >  BLOG_SCRIPT.HTM <                                     |
+|----------------------------------------------------------------------------------------------------|
+|                                        BLOG_FRAME.HTM                                              |
+|                                                                                                    |
+|                                           > BLOG_TOP.HTM <                                         |
+|                                                                                                    |
+|                                                >> BLOG_NAV_BOX.HTM <<                              |
+|                                                                                                    |
+|                                           > BLOG_BODY.HTM <                                        |
+|                                                                                                    |
+|                                                >> BLOG_VIEW_BOX.HTM <<                             |
+|                                                >> BLOG_VIEW_BOX.HTM <<                             |
+|                                                >> BLOG_VIEW_BOX.HTM <<                             |
+|                                                >> BLOG_VIEW_BOX.HTM <<                             |
+|                                                                                                    |
+|                                           > BLOG_BOTTOM.HTM <                                      |
+|                                                                                                    |
+|                                                >> BLOG_STATS_BOX.HTM <<                            |
+|----------------------------------------------------------------------------------------------------|
+|                                        BLOG_FOOTER.HTM                                             |
+======================================================================================================
 
-Everything is processed through the index.php file in the root. 
-It initialises the core system, then checks for an extension to 
-load. If SEO is enabled in the  config table, it looks for this:
-http://www.server.com/EXTENSION/OPTION/ITEM (this is not the final
-SEO styling, but it's a basic form of what the SEO will be once 
-the extensions are built).  If SEO is not enabled, it looks for
-this:
-http://www.server.com/index.php?ext=EXTENSION&opt=OPTION&item=ITEM
-(Again, this is not the final structure, but it's basic enough 
-that future changes won't be much different).  Once it has an
-extension name, it looks for that EXTENSION.php in the /extensions/
-directory.  If it is not found (or if it doesn't find an extension),
-It loads the default extension (currently the cover/intro page).
-This will be customizable in the config table.
-Currently working (somewhat) extensions:
-blogs -> view -> 2
-login -> login (only logs in as the admin for now)
-login -> logout
-
-The common startup checks for the config file and the installation
-directory.  If the config doesn't exist, it jumps to the install. If
-the installation directory exists, it dies as being Offline.
-Otherwise, it loads all the class_*.php files in the /includes/
-directory.  Then, it starts up the database class and connects to
-the MySQL database (dies if error).  Then, it creates the config
-class and reads the config from the database.  Next, it starts
-the session object (which does not enter the database until later).
-Once the session object is created (by retrieving from the database
-or creating a new one), the user object is created.  Then, it
-creates the style object and sets everything to the defaults in the
-config table.  If the site is disabled in the config table (and the
-user is not logging in or in the ACP), it dies here to the offline
-message.
-
-Once the extension is called, it initialises the session object in
-the database (by updating or inserting), then loads the user object
-from the database.  If the login extension is called, it also checks
-the users table for the login information and loads that user if the
-info is valid.  Then, it begins loading the content for the option.
-Then, we declare the final style to use (if nothing is named, it
-defaults to the user's preference, then the config default if no user
-preference).  Finally, it parses the page and outputs it to the 
-screen.
-
-For future reference, extensions must declare a page value (set in
-/includes/constants.php) and load $session->init($page); before
-loading the content.  Also before loading the content, 
-$style->load($containers, $tpl, $style, $imgset, $lang);--with each
-argument being optional--must be called.  Finally, everything is 
-created by calling style->loadPage($body, $hdrftr) with $body being
-an array of 'FRAME_TO_USE' => CONTENT and $hdrftr being an optional
-call for the particular header and footer templates (overall, simple,
-etc) to use.
-
-The objects are structured like this:
-$db is the database object (queries should go through $db->setQuery).
-$config->data is an array of everything from the plus_config table.
-$session is an object holding the current session info.
-$my->uid is the user id.
-$my->data is an array of everything from the plus_users table for
- $my->uid.
-$my->auths is an array of auths given to $my->uid (via the auths 
-class).
-$style is the templating object that parses all content.
-$style->read($filename, $query, $item, $cache) is used to parse the 
-individual pages where $filename is the name of the template file
-(minus the .htm) to read, $query is the optional $query to run and
-load (normally some kind of multiple rows query) that is parsed in
-the $filename, $item is the optional content item number for storing
-the cached file, and $cache is the optional (defaults to off) switch
-to cache the file or not.
-
-If the database is set to debug, it will output all SQL queries sent
-to the database along with generation times, as well as a total 
-generation time.  It will also include other debug information (such
-as GZip, PHP generation time, etc).
-
-##### Templating System #####
-
-Templates are loaded via one system call once the page is ready to be 
-parsed: $style->loadPage($body, $hdrftr); where $body is an array of 
-the content frame and the data to load (blogs_body, viewpost_body, 
-viewforum_body, etc) and  $hdrftr is the optional switch for header 
-and footer type (simple, overall, special, custom, etc).  This call 
-will load the header file, load all the containers and content, and 
-load the footer.
-The containers must be listed in the containers table along with the 
-CSS class ending to use with it (during the parsing, it attaches the 
-sc_style field to the class declaration for its cell that can be 
-specified in the loaded CSS.  Without sc_style declared, the table
-will take the class "box", but with a delcaration, it will be class
-"box-STYLE" (that way, people can have differently styled boxes).
-There are two container formats: horizontal and vertical.  The
-loadContainer function creates a table and loads all published / 
-available Modules set to that container.  Users/Extensions can 
-customize their Modules order and presented Modules which is stored 
-in the users/extensions table (u_contord / se_contord) as a stringed 
-array (serialized through the db_serial function). This is 
-automatically called/set if available.
-This array has the following structure (although the number of 
-modules and containers is unlimited:
-$containers = array(
-	'CONTAINER_NAME' => array(
-		'MODULE_ID' => 'MODULE_OPEN',
-		'MODULE_ID' => 'MODULE_OPEN',
-	),
-	...
-);
-For each module, there is no set template in the template directory.  
-The module file must output its own HTML.  It is already set inside a
-table cell, so creating a table is normally redundant.
-
-Template Files:
-*_list.htm = Listings [Cacheable] (e.g. Memberlist, Blog List, etc)
-*_box.htm = Container [Don't Cache] (e.g. 'left' container)
-*_frame.htm = Body Frame [Don't Cache] (e.g. Blog Framing, Forums Framing)
-*_body.htm = Content Box [Cacheable] (e.g. Blog Post, Forum Topic)
-*_header.htm = Page Header [Don't Cache]
-*_footer.htm = Page Footer [Don't Cache]
-
-##### Caching System #####
-
-There are two different caching systems currently.  One is for SQL 
-data and is used for Lists (such as Blogs, Users, and Forums), Auths, 
-Navigation, Config, Groups.  The other is for Content items (such as 
-Blog posts) and for Modules.  
-The first is stored as FILE.php, and the second as 
-TEMPLATE.LANGUAGE.FILE.ITEM_NUMBER.php, where FILE is semi-configurable.
-Embedded in each is a copy of the original SQL (if any) so that it's
-added to the SQL to the list of processed SQL for debugging and 
-marked as CACHED while not adding to the number of SQL queries sent 
-or SQL time, along with its generation time and a cache 
-authentication key.
+NOTES:
+    (1) > < imply layers of nesting.
+	(2) This sketching is very simplified.

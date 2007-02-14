@@ -1,6 +1,6 @@
 ﻿<?php
 /***************************************************************************
- *							 index.php
+ *							 core.php
  *							----------------
  *	begin		: 1 January 2006
  *	copyright	: impleri
@@ -18,17 +18,28 @@
  *   (at your option) any later version.
  *
  ***************************************************************************/
- 
-// Allow access to files
-define('_PLAY_MUSIC', true);
-$il_root = "./";
 
-// CORE --> Startup primary system
+// no enquiring minds
+defined( '_PLAY_MUSIC' ) or die('Inquiring minds do not get to know.');
 
-// SESSION --> Create/Update the session, login if necessary
+/* Absolute location of config file.
+  * Must include flie name.  
+  * It is highly recommended that this file be inaccessible from the web.
+  * This is the only line you need to edit in this file.
+  */
+$_config_loc = "C:/Program Files/xampp/il_config.php";
 
-// SEO --> Determine which extension to load
+// DEBUG --> Startup running statistics
 
-// EXTENSION -> Load extension and finish the task
+// CONFIG --> Load configuration
 
-?>
+include($_config_loc);
+if( !defined("_INSTALLED") )
+{
+	header('Location: ' . $phpbb_root_path . 'install/install.' . $phpEx);
+	exit;
+}
+
+// DEBUG --> Startup running statistics
+
+// HOOKS --> Prepare hooks class for plugins

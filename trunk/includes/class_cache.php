@@ -1,10 +1,11 @@
 ﻿<?php
 /***************************************************************************
- *						 class_compiler.php
- *						  ----------------------
+ *						 class_cache.php
+ *						  -------------------
  *	begin		: 1 January 2006
  *	copyright	: impleri
  *	email		: impleri@impleri.net
+ *
  *	version	: 0.0.1 - 01/01/2006
  *
  ***************************************************************************/
@@ -22,38 +23,54 @@
 defined( '_PLAY_MUSIC' ) or die('Inquiring minds do not get to know.');
 
 /*
-  *  Name: template_compiler class
-  *  Description: takes html templates, parses them into php, caches the new
-  *      file for faster access, and returns it to the template class for
-  *      current use
-  *  Functions: template_compiler, 
+  * Cache class
+  * ------------
+  * Meta-class for caching
+  *
+  * Functions: template, load, assign, switch
   */
-
-class template_compiler
+class cache
 {
-	var $blocks;
-	
-	/*
-	  *  Name: template_compiler
-	  *  Description: constructer for class
-	  */
-	function template_compiler ()
+	var $_path;
+	var $_file;
+	var $_disabled;
+	var $_cached;
+	var $_time;
+
+	// Constructor
+	function cache($name)
 	{
-		global $config, $user;
+		global $config;
 		
-		$blocks = array();
+		// Get disabled info
+		$config_name = "cache_" . $name;
+		$this->_disabled = !$config->data[$config_name];
+		
+		// Set path and file
+		$this->_name = "dta_" . $name . ".php";
+		$this->_path = $config->root . $config->data['cache_path'];
+		
 		return;
 	}
 	
-	/*
-	  *  Name: template_compiler
-	  *  Description: constructer for class
-	  */
-	function template_compiler ()
+	// Read data (first cache, then db)
+	function read($sql='', $force=false, $key_field='')
 	{
-		global $config, $user;
-		
-		$blocks = array();
-		return;
+	
+	}
+	
+	
+	
+	// For redefinitions in child classes
+	function pre_process(&$rows)
+	{
+	}
+
+	function row_process(&$rows, $row_id)
+	{
+	}
+
+	function post_process(&$rows)
+	{
 	}
 }

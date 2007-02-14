@@ -1,27 +1,20 @@
-<?php
+﻿<?php
 /***************************************************************************
- * @version $Id: feeds.php,v 1.3 2005/06/23 14:57:18 impleri Exp $
- * @package pluscms
- * @copyright (C) 2005 impleri.net
- * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
+ *							 feeds.php
+ *							----------------
+ *	begin		: 1 January 2006
+ *	copyright	: impleri
+ *	email		: impleri@impleri.net
  *
- * begin		: Saturday, 23 April 2005
- * email		: christopher@impleri.net
- * Version		: 0.0.1 - 2005/05/20
- *
- * Plus CMS is Open Source Software
+ *	version	: 0.0.1 - 01/01/2006
  *
  ***************************************************************************/
 
-// main initialisation
-$starttime = microtime();
-define( '_IN_PLUS', true );
-$root_path = ((!@function_exists('realpath') || !@realpath('./common.php')) ? './' : @realpath('./')) . '/';
-$root_path = str_replace('\\', '/', $root_path);
-include($root_path . 'includes/constants.php');
-include($root_path . 'includes/functions.php');
-include( $root_path . 'common.php' );
-
-$session->init(PAGE_BLOGS);
-$style->load();
-?>
+/***************************************************************************
+ *
+ *   This program is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation; either version 2 of the License, or
+ *   (at your option) any later version.
+ *
+ ***************************************************************************/
