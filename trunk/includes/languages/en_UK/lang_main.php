@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************
- * @version $Id: lang_main.php,v 1.2 2005/06/22 03:11:48 impleri Exp $
+ * @version $Id$
  * @package pluscms
  * @copyright (C) 2005 impleri.net
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
@@ -58,5 +58,6 @@ $data['S_Multiple_Errors'] = "The system committed multiple errors.";
 $data['S_Error_Occured'] = "An error has occured.";
 $data['S_Critical_Error'] = "A critical error has occured.";
 $data['S_Template_Missing'] = "Could not locate a required file";
+
 
 ?>

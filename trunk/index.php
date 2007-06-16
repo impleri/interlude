@@ -1,34 +1,26 @@
-﻿<?php
-/***************************************************************************
- *							 index.php
- *							----------------
- *	begin		: 1 January 2006
- *	copyright	: impleri
- *	email		: impleri@impleri.net
- *
- *	version	: 0.0.1 - 01/01/2006
- *
- ***************************************************************************/
+<?php
+//
+//	file: index
+//	begin: 01/01/2006
+//	$Author$
+//	$Revision$
+//	$Date$
+//
+//	description: main file
 
-/***************************************************************************
- *
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation; either version 2 of the License, or
- *   (at your option) any later version.
- *
- ***************************************************************************/
- 
-// Allow access to files
-define('_PLAY_MUSIC', true);
-$il_root = "./";
+// first things are first
+define('PLAY_MUSIC', true);
+$il_ext = substr(strrchr(__FILE__, '.'), 1);
+$il_root = dirname(__FILE__) . '/';
 
-// CORE --> Startup primary system
+// simple startup
+include($il_root . 'includes/core.' . $il_ext);
 
-// SESSION --> Create/Update the session, login if necessary
+// start session
+$session->load();
 
-// SEO --> Determine which extension to load
+// let the extension take over the system
+include($config->extension_by_name($extension));
 
-// EXTENSION -> Load extension and finish the task
-
+// sorry that there isn't any more!
 ?>

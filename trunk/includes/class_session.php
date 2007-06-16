@@ -1,19 +1,17 @@
 <?php
-/***************************************************************************
- * @version $Id: class_session.php,v 1.7 2005/06/23 14:57:22 impleri Exp $
- * @package pluscms
- * @copyright (C) 2005 impleri.net
- * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- *
- * begin		: Saturday, 23 April 2005
- * email		: christopher@impleri.net
- * Version		: 0.0.1 - 2005/05/20
- *
- * Plus CMS is Open Source Software
- *
- ***************************************************************************/
+//
+//	file: includes/class_auth
+//	begin: 01/01/2006
+//	$Author$
+//	$Revision$
+//	$Date$
+//
+//	description: session handler
 
-defined( '_IN_PLUS' ) or die( 'Direct Access to this location is not allowed.' );
+if (!defined('PLAY_MUSIC'))
+{
+	die('No peeksies!');
+}
 
 /*
  * Session class
@@ -45,8 +43,8 @@ class session
 	 * ------------------------------
 	 * Currently blank
 	 */
-	 
-	function session() 
+
+	function session()
 	{
 		global $db, $config, $my;
 		$this->purge($config->data['lifetime']);
@@ -71,21 +69,21 @@ class session
 			$this->s_ipaddr = $this->_user_ip;
 			$this->s_logged_in = '0';
 			$this->s_admin = '0';
-			
+
 		}
 	}
-	
+
 	/*
 	 * function init
 	 * -------------
 	 * Initializes and updates the session in the database
 	 * Also attempts login if a remember cookie is set
 	 */
-	 
-	function init($page=-10) 
+
+	function init($page=-10)
 	{
 		global $db, $config, $my;
-		
+
 		$this->s_page = $page;
 		if($this->s_time == $this->s_start) {
 			if(!($db->insertObject("%__sessions", $this, "s_id"))) {
@@ -93,7 +91,7 @@ class session
 				exit;
 			}
 		}
-		else {		
+		else {
 			if(!($db->updateObject("%__sessions", $this, "s_id"))) {
 				message_die(_GENERAL, 'S_Session_Update', 'D_Session', $db->_errlog);
 				exit;
@@ -116,8 +114,8 @@ class session
 	 * Takes login information from post and checks the info with
 	 * the users table.  If valid, updates sessions table.
 	 */
-	 
-	function login( $username=null,$passwd=null ) 
+
+	function login( $username=null,$passwd=null )
 	{
 		global $db, $config;
 
@@ -178,14 +176,14 @@ class session
 			}
 		}
 	}
-	
+
 	/*
 	 * function logout
 	 * ---------------
 	 * Reverts session data to Anonymous and updates the session table.
 	 * Deletes remember cookies if they are set.
 	 */
-	 
+
 	function logout() {
 		global $db;
 
@@ -209,10 +207,10 @@ class session
 	 * --------------
 	 * Deletes all rows in sessions table older than $inc (1 hour).
 	 */
-	 
+
 	 function purge( $inc=3600 ) {
 		global $db;
-		
+
 		$past = time() - $inc;
 		$query = "DELETE FROM `%__sessions`"
 		. "\nWHERE (`s_time` < '$past')";

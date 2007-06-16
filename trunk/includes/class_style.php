@@ -1,25 +1,17 @@
 <?php
-/***************************************************************************
- *							class_style.php
- *							----------------
- *	begin		: 1 January 2006
- *	copyright	: impleri
- *	email		: impleri@impleri.net
- *
- *	Version		: 0.0.1 - 01/01/2006
- *
- ***************************************************************************/
+//
+//	file: includes/class_style
+//	begin: 01/01/2006
+//	$Author$
+//	$Revision$
+//	$Date$
+//
+//	description: styling of the template
 
-/***************************************************************************
- *
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation; either version 2 of the License, or
- *   (at your option) any later version.
- *
- ***************************************************************************/
-
-defined( '_IN_SYS' ) or die( 'Direct Access to this location is not allowed.' );
+if (!defined('PLAY_MUSIC'))
+{
+	die('No peeksies!');
+}
 
 /*
  * Config class
@@ -297,11 +289,11 @@ class style
                               $blocks = explode('.', $blockname);
                               $blockcount = sizeof($blocks) - 1;
 
-                              $str = &$this->_tpldata; 
-                              for ($i = 0; $i < $blockcount; $i++) 
+                              $str = &$this->_tpldata;
+                              for ($i = 0; $i < $blockcount; $i++)
                               {
-                                        $str = &$str[$blocks[$i]]; 
-                                        $str = &$str[sizeof($str) - 1]; 
+                                        $str = &$str[$blocks[$i]];
+                                        $str = &$str[sizeof($str) - 1];
                               }
                               $str[$blocks[$blockcount]][] = $vararray;
                     }
@@ -320,8 +312,8 @@ class style
                               $blocks = explode('.', $blockname);
                               $blockcount = sizeof($blocks);
 
-                              $str = &$this->_tpldata; 
-                              for ($i = 0; $i < $blockcount; $i++) 
+                              $str = &$this->_tpldata;
+                              for ($i = 0; $i < $blockcount; $i++)
                               {
                                         $str = &$str[ $blocks[$i] ];
                                         $str = &$str[ sizeof($str) - 1 ];
@@ -344,8 +336,8 @@ class style
                               $blocks = explode('.', $blockname);
                               $blockcount = sizeof($blocks) - 1;
 
-                              $str = &$this->_tpldata; 
-                              for ($i = 0; $i < $blockcount; $i++) 
+                              $str = &$this->_tpldata;
+                              for ($i = 0; $i < $blockcount; $i++)
                               {
                                         $str = &$str[ $blocks[$i] ];
                                         $str = &$str[ sizeof($str) - 1 ];

@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************
- * @version $Id: functions.php,v 1.6 2005/06/23 14:57:22 impleri Exp $
+ * @version $Id$
  * @package pluscms
  * @copyright (C) 2005 impleri.net
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL

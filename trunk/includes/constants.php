@@ -1,6 +1,6 @@
 <?php
 /***************************************************************************
- * @version $Id: constants.php,v 1.2 2005/06/22 03:11:48 impleri Exp $
+ * @version $Id$
  * @package pluscms
  * @copyright (C) 2005 impleri.net
  * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL

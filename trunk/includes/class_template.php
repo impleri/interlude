@@ -1,26 +1,17 @@
-﻿<?php
-/***************************************************************************
- *						 class_template.php
- *						  ----------------------
- *	begin		: 1 January 2006
- *	copyright	: impleri
- *	email		: impleri@impleri.net
- *
- *	version	: 0.0.1 - 01/01/2006
- *
- ***************************************************************************/
+<?php
+//
+//	file: includes/class_template
+//	begin: 01/01/2006
+//	$Author$
+//	$Revision$
+//	$Date$
+//
+//	description: loads and parses template files, then outputs information
 
-/***************************************************************************
- *
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation; either version 2 of the License, or
- *   (at your option) any later version.
- *
- ***************************************************************************/
-
-// no enquiring minds
-defined( '_PLAY_MUSIC' ) or die('Inquiring minds do not get to know.');
+if (!defined('PLAY_MUSIC'))
+{
+	die('No peeksies!');
+}
 
 /*
   * Template class
@@ -42,44 +33,44 @@ class template
 	var $main_name;
 	var $alt_name;
 	var $_debug;
-	
-	
+
+
 	// Constructor
 	function template()
 	{
 		// Set file directory and template
-		
+
 		// Check cache info
-	
+
 	}
-	
+
 	// Load (cache or source) & compile (if necessary) template
 	function load($file)
 	{
-	
+
 	}
-	
+
 	// Send output
 	function output()
 	{
-	
+
 	}
-	
+
 	// Assign variable(s)
 	function assign($vars, $value=false)
 	{
-	
+
 	}
-	
+
 	// Assign variable(s) to specific block
 	function assign_to_block($block, $vars, $value=false)
 	{
-	
+
 	}
-	
+
 	// Unset variable(s)
 	function decease($vars)
 	{
-	
+
 	}
 }

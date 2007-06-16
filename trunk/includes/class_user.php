@@ -1,21 +1,17 @@
 <?php
-/***************************************************************************
- * @version $Id: class_user.php,v 1.6 2005/06/23 14:57:22 impleri Exp $
- * @package pluscms
- * @copyright (C) 2005 impleri.net
- * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- *
- * begin		: Saturday, 23 April 2005
- * email		: christopher@impleri.net
- * Version		: 0.0.1 - 2005/05/20
- *
- * Plus CMS is Open Source Software
- *
- * To do : establish & load auths.
- *
- ***************************************************************************/
+//
+//	file: includes/class_user
+//	begin: 01/01/2006
+//	$Author$
+//	$Revision$
+//	$Date$
+//
+//	description: user class
 
-defined( '_IN_PLUS' ) or die( 'Direct Access to this location is not allowed.' );
+if (!defined('PLAY_MUSIC'))
+{
+	die('No peeksies!');
+}
 
 /*
  * User class
@@ -26,7 +22,7 @@ defined( '_IN_PLUS' ) or die( 'Direct Access to this location is not allowed.' )
  *
  * Functions: user, load
  */
- 
+
 class user
 {
 	var $uid=null;
@@ -39,18 +35,18 @@ class user
 	 * ---------------------------
 	 * Sets uid variable to what the session class authenticated
 	 */
-	 
-	function user() 
+
+	function user()
 	{
 		$this->_page = -10;
 	}
-	
+
 	/*
 	 * function load
 	 * -------------
 	 * Loads info from user's table as an array.
 	 */
-	 
+
 	function load( $uid )
 	{
 		global $db;

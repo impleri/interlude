@@ -1,22 +1,17 @@
 <?php
-/***************************************************************************
- * @version $Id: class_config.php,v 1.8 2005/06/23 14:57:22 impleri Exp $
- * @package pluscms
- * @copyright (C) 2005 impleri.net
- * @license http://www.gnu.org/copyleft/gpl.html GNU/GPL
- *
- * begin		: Saturday, 23 April 2005
- * email		: christopher@impleri.net
- * Version		: 0.0.1 - 2005/05/20
- *
- * Plus CMS is Open Source Software
- *
- * To do : Add run_stats class
- *
- ***************************************************************************/
+//
+//	file: includes/class_config
+//	begin: 01/01/2006
+//	$Author$
+//	$Revision$
+//	$Date$
+//
+//	description: config
 
-defined( '_IN_PLUS' ) or die( 'Direct Access to this location is not allowed.' );
-
+if (!defined('PLAY_MUSIC'))
+{
+	die('No peeksies!');
+}
 
 /*
  * Config class
@@ -25,7 +20,7 @@ defined( '_IN_PLUS' ) or die( 'Direct Access to this location is not allowed.' )
  *
  * Functions: config, read
  */
- 
+
 class config
 {
 	var $data;
@@ -41,30 +36,30 @@ class config
 	 * -----------------------------
 	 * Creates the config object and stores skeletal info
 	 */
-	 
+
 	 function config()
 	{
 		global $root_path;
-		
+
 		$this->data = array();
 		$this->data_time = 0;
 		$this->from_cache = false;
 		$this->recache = false;
 		$this->_root = $root_path;
 	}
-	
+
 	/*
 	 * function read
 	 * -------------
 	 * Loads config data from SQL and cache
 	 */
-	 
+
 	function read($force=false)
 	{
 		global $db;
 		// get dynamic values
-		$sql = "SELECT `sc_name`, `sc_value` 
-					FROM `%__config` 
+		$sql = "SELECT `sc_name`, `sc_value`
+					FROM `%__config`
 					WHERE `sc_static` = '0'";
 		$db->setQuery($sql);
 		if (!($rows = $db->loadAssocList('sc_name'))) {
