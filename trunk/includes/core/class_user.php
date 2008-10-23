@@ -18,12 +18,10 @@ if (!defined('PLAY_MUSIC'))
  * --------------
  * This keeps current user's info handy for checking data and auths.
  *
- * This is based on pthirik's work on the Categories Hierarchy MOD for phpBB2
- *
  * Functions: user, load
  */
 
-class user
+class user extends db_table
 {
 	var $uid=null;
 	var $data=null;

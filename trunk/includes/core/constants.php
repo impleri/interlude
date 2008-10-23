@@ -49,6 +49,12 @@ define('PAGE_PROFILE', -70);
 define('PAGE_VIEWPROF', -71);
 define('PAGE_MEMBERLIST', -72);
 
+// pages are stored in database
+while ($row = $db->get_row($result))
+{
+	define(strtoupper('page_' . $row['page_name']), $row['page_id']);
+}
+
 /* Error Messages */
 define('_MESSAGE', 400);
 define('_GENERAL', 401);
