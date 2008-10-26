@@ -1,0 +1,32 @@
+                      ###      #           #        #
+                       #  ##  ### ### ###  #  # # ### ###
+                       #  # #  #  ##  #    #  # # # # ##
+                       #  # #  ## ### #    ## ### ### ###
+                      ###
+
+##############################################################################################
+## Interlude CMS Documentation
+## Author: impleri < christopher@impleri.net > (Christopher Roussel) http://interlude-cms.org/
+##
+## Styling
+##############################################################################################
+
+##### Templates #####
+A template should be generic enough to sustain different image schemes and css styles.  The 
+index.html file is the primary layout which utilizes the modularity of Interlude to display
+content dynamically.  All styles should include a a menu section, at least one sidebar
+section, and a main content section.  The menu section can be created either vertically or
+horizontally and can include sub-menus, but all of this is generated on-the-fly according to
+options in the menu reference in a given template.  The sidebar section is also generated on-
+the-fly, but must be vertical.  There can be multiple sidebars, but these are positioned by
+the template (or by css if you choose).  The main content section is generated according to
+the page being accessed.  It first goes through the template file hierarchy of the module that
+is generating the content, then falls back to the default module and processes accordingly.
+A good example is a forum module in which a user is attempting to view a topic: the process
+for viewing a topic should specify a template file (such as forum_viewtopic.html).  If that
+does not exist, the display engine will try to recover by falling back to the default display
+of the forum module (such as an index page).  If that also fails, the system will fall back
+to its default module (such as a splash page) with an error message.  Lastly, all primary
+styling should follow the generic css outline in order to be compatible with multiple styles.
+
+##### Styles #####

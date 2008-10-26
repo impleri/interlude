@@ -4,99 +4,30 @@
                        #  # #  ## ### #    ## ### ### ###
                       ###
 
-## Interlude Notes
+##############################################################################################
+## Interlude CMS Documentation
 ## Author: impleri < christopher@impleri.net > (Christopher Roussel) http://interlude-cms.org/
+##
+## General Notes
+##############################################################################################
 
-##### Requirements #####
- * PHP 4.1.0
- * MySQL 4.0.x
- * GD Library 2.0
+System Requirements
+ * PHP 5
+ * MySQL 5
 
-##### Recommended #####
- * PHP 5.x
- * MySQL 5.x
- * ImageMagick
-
-##### Installation #####
-
- * Copy the files in trunk to a web-accessible directory (i.e. one that is under the /public_html/, /www/, or similar directory)
- * Let the installer do its magic
- * If necessary, edit /includes/config to reflect your info.  If the script cannot write to that file, the installer will give you what you need to write
+Installation
+ * Copy the files in web-root to a web-accessible directory (i.e. one that is
+   under the /public_html/, /www/, /httpdocs/, or similar directory)
+ * Copy the files in script-root to any directory that is not web-accessible
+ * Edit index.php from the web-root folder and follow the instructions to change
+   the path (more instructions there so not needed here)
+ * Set the following directories and files to be writeable by Apache/PHP
+   (CHMOD 777 unless the server runs PHP in a chroot environment)
+   script-root/cache/
+   script-root/system/config.php (can be changed back after install)
+   web-root/images/avatars/
+   web-root/files/uploads/ (optional: this is only if you want to allow uploads)
+ * Open the site in a web browser (http://yoursite.com/) and follow the
+   installer's instructions
  * Remove /install/ directory
- * OPTIONAL: Remove the /docs/ directory
-
-##### Templating #####
-
-General Template Files Schema:
-*_header.htm = Page Header
-*_script.htm = JavaScript for particular body/frame
-*_frame.htm = Body Frame (e.g. Blog Framing, Forums Framing)
-*_top.htm = Content Top/Left
-*_body.htm = Content Box (e.g. Blog Post, Forum topic view, Forum forum view)
-*_list.htm = Listings (e.g. Memberlist, Blog List, etc)
-*_box.htm = Item Box for list/body (e.g. Topic Row, Forum Row, Blog Entry)
-*_bottom.htm = Content Right/Bottom
-*_footer.htm = Page Footer
-
-So that a view forum page (with 2 sub-forums and 4 topics) will be created as such:
-
-======================================================================================================
-|                                        FORUM_HEADER.HTM                                            |
-|                                                                                                    |
-|                                           >  FORUM_SCRIPT.HTM <                                    |
-|----------------------------------------------------------------------------------------------------|
-|                                        FORUM_FRAME.HTM                                             |
-|                                                                                                    |
-|                                           > FORUM_TOP.HTM <                                        |
-|                                                                                                    |
-|                                                >> FORUM_NAV_BOX.HTM <<                             |
-|                                                                                                    |
-|                                           > FORUM_BODY.HTM <                                       |
-|                                                                                                    |
-|                                                >> FORUM_LIST.HTM <<                                |
-|                                                   >>> FORUM_LIST_BOX.HTM <<<                       |
-|                                                   >>> FORUM_LIST_BOX.HTM <<<                       |
-|                                                                                                    |
-|                                                >> FORUM_VIEW_BOX.HTM <<                            |
-|                                                   >>> TOPIC_LIST_BOX.HTM <<<                       |
-|                                                   >>> TOPIC_LIST_BOX.HTM <<<                       |
-|                                                   >>> TOPIC_LIST_BOX.HTM <<<                       |
-|                                                   >>> TOPIC_LIST_BOX.HTM <<<                       |
-|                                                                                                    |
-|                                           > FORUM_BOTTOM.HTM <                                     |
-|                                                                                                    |
-|                                                >> FORUM_STATS_BOX.HTM <<                           |
-|----------------------------------------------------------------------------------------------------|
-|                                        FORUM_FOOTER.HTM                                            |
-======================================================================================================
-
-and a view blog page (with 4 posts) will be created as such:
-
-======================================================================================================
-|                                        BLOG_HEADER.HTM                                             |
-|                                                                                                    |
-|                                           >  BLOG_SCRIPT.HTM <                                     |
-|----------------------------------------------------------------------------------------------------|
-|                                        BLOG_FRAME.HTM                                              |
-|                                                                                                    |
-|                                           > BLOG_TOP.HTM <                                         |
-|                                                                                                    |
-|                                                >> BLOG_NAV_BOX.HTM <<                              |
-|                                                                                                    |
-|                                           > BLOG_BODY.HTM <                                        |
-|                                                                                                    |
-|                                                >> BLOG_VIEW_BOX.HTM <<                             |
-|                                                >> BLOG_VIEW_BOX.HTM <<                             |
-|                                                >> BLOG_VIEW_BOX.HTM <<                             |
-|                                                >> BLOG_VIEW_BOX.HTM <<                             |
-|                                                                                                    |
-|                                           > BLOG_BOTTOM.HTM <                                      |
-|                                                                                                    |
-|                                                >> BLOG_STATS_BOX.HTM <<                            |
-|----------------------------------------------------------------------------------------------------|
-|                                        BLOG_FOOTER.HTM                                             |
-======================================================================================================
-
-NOTES:
-    (1) > < imply layers of nesting.
-	(2) This sketching is very simplified.
+ * That's it

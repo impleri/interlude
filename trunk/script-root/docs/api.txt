@@ -1,0 +1,38 @@
+                      ###      #           #        #
+                       #  ##  ### ### ###  #  # # ### ###
+                       #  # #  #  ##  #    #  # # # # ##
+                       #  # #  ## ### #    ## ### ### ###
+                      ###
+
+##############################################################################################
+## Interlude CMS Documentation
+## Author: impleri < christopher@impleri.net > (Christopher Roussel) http://interlude-cms.org/
+##
+## Plugin API
+##############################################################################################
+
+The Interlude core is divided into many abstract classes in order to facilitate finer controls
+of modules.
+
+The most useful classes for module authors are $config, $db, $hooks, $plugins, and $template.
+
+Here's a quick rundown of each:
+--------------------------------------------------------------------------------
+$config: this class is the one that works with all config values.  Any and all variable
+settings should be called and accessed through this one class.
+
+$db: this class is the abstraction layer for the database.  All regular database procedures
+should run through this.  Every SQL action is required to have a unique name for hook actions
+(see next item).
+
+$hooks: this class handles calls to _modify_ an existing function (such as adding a field to a
+memberlist display)
+
+$plugins: this class handles calls to _add_ a function (such as adding the above memberlist)
+
+$template: this class is for outputing information to any display.  This includes all HTML,
+CSS, and Javascripts as well as handling all language and image variables.
+
+The main difference between hooks and plugins is that plugins have hooks (and even additional
+plugins!) within them while hooks do not.  In many ways, the core scripts are primarily hooks
+and plugin points.  With everything done this way, the system is completely modular.

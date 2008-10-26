@@ -4,7 +4,7 @@
 ** $Revision$
 ** $Date$
 **
-** description: the real startup file.
+** description: core startup file
 **/
 
 if (!defined('PLAY_MUSIC'))
@@ -38,9 +38,5 @@ foreach ($init as $inc)
     }
     require_once $inc_path;
 }
-
-unset($IL_ROOT, $IL_WEBROOT, $IL_EXT, $IL_ERROR, $init, $inc_path);
-
-interlude::process();
 
 ?>
