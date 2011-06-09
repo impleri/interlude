@@ -1,41 +1,64 @@
 <?php
-/* file: index
- * begin: 01/01/2006
- * $Revision: 11 $
- * $Date: 2008-10-26 22:49:29 +0000 (Sun, 26 Oct 2008) $
+/**
+ * index file
  *
- * description: startup file.  since everything is handled internally, this is
- *      primarily to set the first few definitions and load the system.
+ * since everything is handled internally, this is primarily to set the first
+ * few definitions and load the system.
+ *
+ * @package interlude
+ * @subpackage web
+ * @copyright Christopher Roussel <christopher@impleri.net>
  */
 
-/* INSTRUCTIONS: set the value of this file to the core system directory
- * This can be either an absolute path (like /home/USER/interlude/) or a
- * relative one (like ../../interlude).  The system will try to resolve it to
- * an absolute one later on.  Be sure that it is enclosed in quotation marks
- * (' or ") and the line ends with a semi-colon(;), just like it is now.
+/**
+ * path to the system startup file
+ * this can be either an absolute or a relative path anywhere accessible
+ * including outside of this web-accessible directory
  */
-$core_path = '/path/to/core/file/startup.php';
+$loadPath = '/path/to/app/startup.php';
 
-/* error message: modify to fit your own site or language needs.  it is used in
- * the off-chance that this script cannot find the primary system ($IL_ROOT).
+/**
+ * really bad error message
+ * used in the off-chance that this script cannot find the system startup
  */
-$IL_ERROR = 'I cannot find the required file %s!  Please contact the system
-administrator immediately.';
+define('IL_FILE_ERROR', 'I cannot find the required file %s!  Please contact the system
+administrator immediately.');
 
 /* DO NOT EDIT BELOW THIS LINE! */
 
-if (!file_exists($core_path)) {
-    die(sprintf($IL_ERROR, $core_path));
+/**
+ * starting time (for debug and performance)
+ */
+define('IL_STARTTIME', microtime(true));
+
+// check for existence of startup file
+if (!file_exists($loadPath)) {
+    die(sprintf(IL_FILE_ERROR, $loadPath));
     exit;
 }
 
-// system constant: if this is not declared, nothing will load
+/**
+ * system security constant
+ * if this is not declared, nothing will load
+ */
 define('PLAY_MUSIC', true);
 
-// basic variables
+/**
+ * script file extension
+ * uses the extension of this file (generally, this is php)
+ */
 define('IL_EXT', substr(strrchr(__FILE__,'.'),1));
+
+/**
+ * web root path
+ * this is used later on for routing includes (like images)
+ */
 define('IL_WEBROOT', dirname(__FILE__));
 
-// everything else is handled in the file /PATH/TO/ROOT/startup.php.
-require_once $core_path;
-unset($core_path);
+// load core in autoload.php
+require_once $loadPath;
+unset($loadPath);
+
+// output display
+$app = ilFactory::getApplication();
+$app->display();

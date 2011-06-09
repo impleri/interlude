@@ -1,24 +1,13 @@
-                      ###      #           #        #
-                       #  ##  ### ### ###  #  # # ### ###
-                       #  # #  #  ##  #    #  # # # # ##
-                       #  # #  ## ### #    ## ### ### ###
-                      ###
+Introduction to Interlude
+=========================
 
-##############################################################################################
-## Interlude CMS Documentation
-## Author: impleri < christopher@impleri.net > (Christopher Roussel) http://interlude-cms.org/
-##
-## Plugin API
-##############################################################################################
+The Interlude system is similar to other frameworks, mixing ideas found in Joomla, CakePHP, and Ruby on Rails. Its goal is to make a stable framework which is highly modular, configurable, and consistent. To achieve this aim, development utilised a variation of the common MVC pattern which further refines models (the M) to create a basic reusable API (a library) separate from the needs which normally create the model. In separating a simple API library from the standard MVC pattern, Interlude takes reusable code to a new level as development is done with the expectation that another developer may use some aspects of a model in a completely different way.
 
-The Interlude core is divided into many abstract classes in order to facilitate finer controls
-of modules.
+Like other frameworks, there is a static factory class (ilFactory) which organises and provides core objects.
 
-The most useful classes for module authors are $config, $db, $hooks, $plugins, and $template.
+Here's a quick rundown of each core object and what to expect to find in them:
 
-Here's a quick rundown of each:
---------------------------------------------------------------------------------
-$config: this class is the one that works with all config values.  Any and all variable
+1. $config: this class is the one that works with all config values.  Any and all variable
 settings should be called and accessed through this one class.
 
 $db: this class is the abstraction layer for the database.  All regular database procedures

@@ -1,88 +1,97 @@
 <?php
-/** file: startup
- * Begin: 01/01/2006
- * $Revision: 11 $
- * $Date: 2008-10-26 22:49:29 +0000 (Sun, 26 Oct 2008) $
+/**
+ * startup file
  *
- * description: autoloader class
+ * system bootstrap and autoloader
+ *
+ * @package interlude
+ * @subpackage app
+ * @copyright Christopher Roussel <christopher@impleri.net>
  */
 
 if (!defined('PLAY_MUSIC')) {
 	die('Play it from the top, Sammie.');
 }
 
-// correct root path
+/**
+ * system root path
+ * this is used later on for script includes
+ */
 define('IL_ROOT', dirname(__FILE__));
 
-require_once(IL_ROOT . '/system/core.' . IL_EXT);
+/**
+ * core autoloader
+ *
+ * will attempt to construct a path and include it for the defined class
+ * class and file naming convention is as follows:
+ * classes have two or three segments which identify its location
+ *
+ * first is the extension name or code (e.g. interlude or il) which will
+ * determine the directory in /app/ to use.
+ *
+ * second is the (optional) type name, such as model or controller. some have
+ * predefined directories (see below). if that fails, it will check the plugins
+ * and lastly default to the given type name.
+ *
+ * third is the class file name. camelCase names are separated by underscores
+ * (so camelCase becomes camel_case)
+ *
+ * the path is then inserted between the root path (e.g. /app/) and file
+ * extension (e.g. .php)
+ *
+ * example: the MyExtension extension uses me as its code. the class name
+ * passed to ilAutoload is meControllerMyAppThing. its default path would be
+ * /app/myextension/controllers/my_app_thing.php. if mesomething were passed,
+ * the path would be /app/myextension/something.php. if it was meSomethingElse,
+ * the path would be /app/myextension/something/else.php unless plugins change
+ * it (@see ilExtensions::getExtensionFile)
+ *
+ * @param string $class name of class to autoload
+ * @param string $fileExt comma-separated list of extensions to check (optional)
+ */
+function ilAutoload ($class) {
+	// split the class name into identifying segments
+	preg_match_all('/[A-Z][^A-Z]*/', $class, $segments);
+	$extension = strtolower(array_shift($segments));
+	$type = strtolower(array_shift($segments));
+	$file = (count($segments)>0) ? strtolower(implode('_', $segments)) : $type;
 
-ilCore::init();
+	// determine which extension directory (pluggable in ilExtenstions)
+	$extension = ($extension == 'il') ? 'system' : ilExtensions::getPathToExtension($extension);
 
+	// determine which subdirectory (pluggable in ilExtenstions)
+	switch ($type) {
+		// pluralise common types
+		case 'library':
+			$directory = 'libraries';
+			break;
+		case 'model':
+		case 'view':
+		case 'controller':
+		case 'helper':
+			$directory = $type . 's';
+			break;
 
+		// nothing if there is no type
+		case $file:
+			$directory = '';
+			break;
 
-class interlude {
-	/* preload(): loads required modules, then finds all other modules
-	* and loads each init script (init.php in their main folder)
-	*
-	* NOTE: none of these init scripts should run anything.  These will load
-	* during the load phase with everything else.  Use the feeds module as an
-	* example.
-	*
-	* Each module should be self-contained under a single directory here.
-	* How mod authors organize within there is up to them.
-	*
-	* What gets loaded here: $db, $config, $plugins, $hooks;
-	*/
-	function preload() {
-		// run core preload
-
-
-		// preload modules
-		foreach ($config->modules as $module) {
-			include_once($config->sys_path($module . '/init'));
-		}
-
-		return true;
-		}
-
-	/* load(): loads all modules (instantiates the main class)
-	* NOTE: none of these init scripts should run anything.  These will load
-	* during the load phase with everything else.
-	*
-	* What gets loaded here: everything that is installed
-	*/
-	function load() {
-		global $config;
-
-		// load core modules first
-		foreach ($config->core_modules as $module) {
-			$$module = new $module();
-		}
-
-		// load remaining modules
-		foreach ($config->modules as $module) {
-			$$module = new $module();
-		}
-
-		// combine lists of modules together
-		$config->set('modules', $config->modules + $config->core_modules);
-		$config->unset('core_modules');
-
-		return true;
+		// otherwise pass to plugin manager (default will be $type)
+		default:
+			$directory = ilExtensions::getExtensionFile($type, $file);
+			break;
 	}
 
-	// run(): processes all loaded modules
-	function run()
-	{
-		global $config;
+	// build the path
+	$path = IL_ROOT . DIRECTORY_SEPARATOR . $extension . DIRECTORY_SEPARATOR . $directory . DIRECTORY_SEPARATOR . $file . IL_EXT;
 
-		foreach ($config->modules as $module) {
-			if (method_exists($module, 'process')) {
-				$$module->process();
-			}
-		}
+	// require if file found
+	if(file_exists($path)) {
+		require_once($path);
 	}
 }
+spl_autoload_register('ilAutoload');
 
-
-interlude::process();
+// boot the system
+$app = ilFactory::getApplication();
