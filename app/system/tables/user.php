@@ -1,16 +1,14 @@
 <?php
-//
-//	file: includes/class_user
-//	begin: 01/01/2006
-//	$Author$
-//	$Revision$
-//	$Date$
-//
-//	description: user class
+/**
+ * generic user object
+ *
+ * @package interlude
+ * @subpackage framework
+ * @copyright Christopher Roussel <christopher@impleri.net>
+ */
 
-if (!defined('PLAY_MUSIC'))
-{
-	die('No peeksies!');
+if (!defined('PLAY_MUSIC')) {
+	die('Play it from the top, Sammie.');
 }
 
 /*
@@ -21,7 +19,7 @@ if (!defined('PLAY_MUSIC'))
  * Functions: user, load
  */
 
-class user extends db_table
+class ilUser extends ilParentTable
 {
 	var $uid=null;
 	var $data=null;
@@ -33,9 +31,7 @@ class user extends db_table
 	 * ---------------------------
 	 * Sets uid variable to what the session class authenticated
 	 */
-
-	function user()
-	{
+	function user() {
 		$this->_page = -10;
 	}
 
@@ -45,8 +41,7 @@ class user extends db_table
 	 * Loads info from user's table as an array.
 	 */
 
-	function load( $uid )
-	{
+	function load( $uid ) {
 		global $db;
 		$this->uid = $uid;
 
@@ -69,5 +64,3 @@ class user extends db_table
 		}
 	}
 } // END class user
-
-?>

@@ -1,56 +1,31 @@
 <?php
-/* file: system/class_db
-** begin: 01/01/2006
-** $Revision$
-** $Date$
-**
-** description: practical dbal layer.
-**/
-
-if (!defined('PLAY_MUSIC'))
-{
-	die('Start from the beginning.');
-}
-
-require($IL_ROOT . 'dbal/' . $db_config['dbal'] . '.' . $IL_EXT);
-
-class db_class extends db_layer
-{
-    private var $sql;
-    private var $keys;
-    private var $vals;
-
-        function __construct($server, $user, $pass, $db, $persistent=true)
-        {
-            parent::__construct();
-            return parent::connect($server, $user, $pass, $db, $persistent);
-        }
-
-        function __destruct()
-        {
-            return parent::disconnect();
-        }
-}
-
-/*
- * Table class
- * --------------
- * This is a parent class for interaction with the db
- * on a simple level
+/**
+ * mysql db connector
  *
- * Functions: select, insert, update, delete
+ * @package interlude
+ * @subpackage app
+ * @copyright Christopher Roussel <christopher@impleri.net>
  */
 
-class db_table
-{
-	function __construct()
-	{
+if (!defined('PLAY_MUSIC')) {
+	die('Play it from the top, Sammie.');
+}
 
+class ilDatabaseMysql extends ilParentDatabase
+{
+	private $sql;
+	private $keys;
+	private $vals;
+
+	function __construct($server, $user, $pass, $db, $persistent=true)
+	{
+		parent::__construct();
+		return parent::connect($server, $user, $pass, $db, $persistent);
 	}
 
 	function __destruct()
 	{
-
+		return parent::disconnect();
 	}
 
 	function select($fields=false, $wheres=false, $joins=false, $as=false)
@@ -160,11 +135,4 @@ class db_table
 		unset($query);
 		return;
 	}
-
-
 }
-
-$db = new db_class($db_config['sqlserver'], $db_config['sqluser'], $db_config['sqlpass'], $db_config['sqldb'], $db_config['sqlpersistent']);
-unset($db_config);
-
-?>

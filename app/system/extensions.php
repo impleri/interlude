@@ -1,33 +1,21 @@
 <?php
 /**
- * Extensions classes
+ * static extensions handling
  *
- * @author Christopher Roussel <christopher@impleri.net>
- * @version $Id$
- * @package Interlude
- * @filesource
+ * @package interlude
+ * @subpackage framework
+ * @copyright Christopher Roussel <christopher@impleri.net>
  */
 
 if (!defined('PLAY_MUSIC')) {
 	die('Play it from the top, Sammie.');
 }
 
-/**#@+
- * Requires version comparison constant
- */
-define('IL_EXTENSIONS_LT', -2);
-define('IL_EXTENSIONS_LTE', -1);
-define('IL_EXTENSIONS_EQ', 0);
-define('IL_EXTENSIONS_GT', 1);
-define('IL_EXTENSIONS_GTE', 2);
-define('IL_EXTENSIONS_DEFAULT_VERSION', 100);
-define('IL_EXTENSIONS_MAX_COUNT', 3);
-
 /**
  * Extensions class
  *
- * Used when loading extensions. Interlude uses a package dependancy system
- * to ensure that extensions do not load if dependancies are not met.
+ * Interlude uses a package dependancy system to ensure that extensions do not
+ * load if dependancies are not met.
  * Connected to the extensions table in db. Table schema:
  * <i>id</i> - Autonumber INT
  * <i>name</i> - Package name. VARCHAR. [UNIQUE]
@@ -49,7 +37,7 @@ define('IL_EXTENSIONS_MAX_COUNT', 3);
  * @package Interlude
  * @subpackage Extension-API
  */
-class ilExtensions extends ilDataCacheParent {
+class ilExtensions extends ilParentDataCache {
 	/**
 	 * Provides meta-package
 	 *
@@ -66,6 +54,8 @@ class ilExtensions extends ilDataCacheParent {
 	var $needed = array();
 	var $metaNeeded = array();
 	var $resolved = true;
+	private $_default_version = '1.0.0';
+	private $_max_count = 3;
 
 	// load existing data from cache/db
 	function __construct() {
@@ -327,59 +317,6 @@ class ilExtensions extends ilDataCacheParent {
 		return $check;
 	}
 
-	/**
-	 * Comparison Converter
-	 *
-	 * Converts the text version
-	 *
-	 * @access private
-	 * @param string Version string
-	 * @return int Constant value of comparison needed (default is less than or equal to)
-	 */
-	function parseComp ($version) {
-		$nums = array ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
-		$version = trim(str_replace($nums, '', $version));
-		switch ($version) {
-			case '<=':
-			case 'lte':
-				$ret = IL_EXTENSIONS_LTE;
-				break;
-			case '<':
-			case 'lt':
-				$ret = IL_EXTENSIONS_LT;
-				break;
-			case '==':
-			case '=':
-			case 'eq':
-				$ret = IL_EXTENSIONS_EQ;
-				break;
-			case '>':
-			case 'gt':
-				$ret = IL_EXTENSIONS_GT;
-				break;
-			case '>=':
-			case 'gte':
-			default:
-				$ret = IL_EXTENSIONS_GTE;
-				break;
-		}
-		return $ret;
-	}
-
-	/**
-	 * Version Converter
-	 *
-	 * Converts the text version to a float val
-	 *
-	 * @param string Version string
-	 * @return float Version number (default is 0001)
-	 */
-	function parseVers ($version) {
-		$ops = array ('<', '>', '=', 'g', 'l', 't', 'e', 'q', 'a');
-		$version = trim(str_replace($ops, '', $version));
-		return (empty($version)) ? IL_EXTENSIONS_DEFAULT_VERSION : intval($version);
-	}
-
 	function setResolved ($res=true) {
 		foreach ($this->data as $name => $pkg) {
 			$pkg['resolved'] = $res;
@@ -393,6 +330,10 @@ class ilExtensions extends ilDataCacheParent {
 			$this->changed = true;
 		}
 	}
+
+	function getPathToExtension ($extension) {}
+
+	function getExtensionFile ($type, $file) {}
 
 }
 
@@ -422,10 +363,7 @@ class ilParentExtension extends ilParent {
 		}
 		$this->depends = $cleanDeps;
 	}
-}
 
-class ilExtension extends ilParentExtension {
-	var $name = '';
 	var $active = 0;
 
 	function add() {

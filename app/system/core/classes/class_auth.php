@@ -1,1 +1,0 @@
-<?php////	file: includes/class_auth//	begin: 01/01/2006//	$Author$//	$Revision$//	$Date$////	description: auth classif (!defined('PLAY_MUSIC')){	die('No peeksies!');}?>

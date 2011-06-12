@@ -1,16 +1,14 @@
 <?php
-//
-//	file: includes/class_auth
-//	begin: 01/01/2006
-//	$Author$
-//	$Revision$
-//	$Date$
-//
-//	description: session handler
+/**
+ * session object
+ *
+ * @package interlude
+ * @subpackage framework
+ * @copyright Christopher Roussel <christopher@impleri.net>
+ */
 
-if (!defined('PLAY_MUSIC'))
-{
-	die('No peeksies!');
+if (!defined('PLAY_MUSIC')) {
+	die('Play it from the top, Sammie.');
 }
 
 /*
@@ -23,8 +21,7 @@ if (!defined('PLAY_MUSIC'))
  * Functions: session, init, login, logout, load, purge
  */
 
-class session
-{
+class ilTableSession extends ilParentTable {
 	var $_sessionid = null;
 	var $_s_cookie = null;
 	var $_d_cookie = null;

@@ -1,18 +1,17 @@
 <?php
 /**
- * Plugin classes
+ * generic plugin object
  *
- * @author Christopher Roussel <christopher@impleri.net>
- * @version $Id$
- * @package Interlude
- * @filesource
+ * @package interlude
+ * @subpackage framework
+ * @copyright Christopher Roussel <christopher@impleri.net>
  */
 
 if (!defined('PLAY_MUSIC')) {
 	die('Play it from the top, Sammie.');
 }
 
-class ilPlugin extends ilCacheParent {
+class ilParentPlugin extends ilParentObject {
 	var $name = '';
 
 	function __construct() {} // runs before final dependancy resolution

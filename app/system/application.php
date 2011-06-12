@@ -1,8 +1,6 @@
 <?php
 /**
- * startup file
- *
- * system bootstrap and autoloader
+ * application mainframe
  *
  * @package interlude
  * @subpackage app

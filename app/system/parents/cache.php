@@ -1,18 +1,17 @@
 <?php
 /**
- * Cache classes
+ * generic cache object
  *
- * @author Christopher Roussel <christopher@impleri.net>
- * @version $Id$
- * @package Interlude
- * @filesource
+ * @package interlude
+ * @subpackage framework
+ * @copyright Christopher Roussel <christopher@impleri.net>
  */
 
 if (!defined('PLAY_MUSIC')) {
 	die('Play it from the top, Sammie.');
 }
 
-class ilCacheParent extends ilParent {
+class ilParentCache extends ilParentObject {
 	var $_cache = null;
 
 	function __construct() {

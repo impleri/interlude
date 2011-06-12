@@ -1,27 +1,93 @@
 Introduction to Interlude
 =========================
 
-The Interlude system is similar to other frameworks, mixing ideas found in Joomla, CakePHP, and Ruby on Rails. Its goal is to make a stable framework which is highly modular, configurable, and consistent. To achieve this aim, development utilised a variation of the common MVC pattern which further refines models (the M) to create a basic reusable API (a library) separate from the needs which normally create the model. In separating a simple API library from the standard MVC pattern, Interlude takes reusable code to a new level as development is done with the expectation that another developer may use some aspects of a model in a completely different way.
+The Interlude system is similar to other frameworks, mixing ideas found in Joomla, CakePHP, and Ruby on Rails. Its goal is to make a stable framework which is highly modular, configurable, and consistent. To achieve this aim, development utilised a variation of the common MVC pattern which further refines models (the M) to create a basic reusable API library separate from the needs which normally create the model. In separating a simple API library from the standard MVC pattern, Interlude takes reusable code to a new level as development is done with the expectation that another developer may use some aspects of a model in a completely different way. To be fair, this concept can be found in other frameworks already (e.g. Joomla, Rails).
 
+
+Development Goals
+-----------------
+ 1. Everything is extendable. It's easy to add something!
+ 2. Everything is replaceable. Don't like the way something works? Replace it!
+ 3. Everything is accessible. Be straightforward with other developers on how you want to handle your data!
+
+
+System Objects
+--------------
 Like other frameworks, there is a static factory class (ilFactory) which organises and provides core objects.
-
 Here's a quick rundown of each core object and what to expect to find in them:
+ * ilConfig		this class is the one that works with all config values.  Any and all variable settings should be called and accessed through this one class.
+ * ilDatabase	this class is the abstraction layer for the database.  All regular database procedures should run through this.  Every SQL action is required to have a unique name for hook actions.
+ * ilTemplate	this class is for outputing information to any display.  This includes all HTML, CSS, and Javascripts as well as handling all language and image variables.
+ * ilExtensions	handles de/registering extensions as well as plugin hooks.
+ * ilLanguage	handles language related operations,including loading language files and parsing language strings.
+ * ilCache		primary cache handling.
 
-1. $config: this class is the one that works with all config values.  Any and all variable
-settings should be called and accessed through this one class.
 
-$db: this class is the abstraction layer for the database.  All regular database procedures
-should run through this.  Every SQL action is required to have a unique name for hook actions
-(see next item).
+Magic Directories
+-----------------
+The following directories have special use contexts for the Interlude core and autoloading:
+ * controllers	handle input control, pass data to models for processing, push processed data into views for output
+ * helpers		miscellaneous functions used in multiple views/models/libraries/etc.
+ * install		holds all schema (tables, auths, panels, system menus, etc) and processes for (un)installation and upgrade
+ * language		language files
+ * models		high-level data handling (interacts with libraries, never with tables or database)
+ * parents		abstract classes for reusability (e.g. plugins)
+ * tables		low-level data handling library (interacts directly with database) -- think ActiveRecord in Rails
+ * templates	positions output
+ * views		handles output control (interacts with templates)
 
-$hooks: this class handles calls to _modify_ an existing function (such as adding a field to a
-memberlist display)
+A (simplified) request would follow the following path: input -> controller -> model -> table (-> model) -> controller -> view -> template -> output
 
-$plugins: this class handles calls to _add_ a function (such as adding the above memberlist)
 
-$template: this class is for outputing information to any display.  This includes all HTML,
-CSS, and Javascripts as well as handling all language and image variables.
+Magic Files
+-----------
+Just as some directories are utilised by Interlude, there are a number of file names which will be automatically loaded in context:
+ * install.php		included when an extension is installed or removed
+ * bootstrap.php	used to connect an extension into Interlude (i.e. hooks)
+ * panels.php		used to define and patch existingn panels (separate from install for panel reloading)
+ * version.php		define your version number, dependencies, and activation/deactivion methods
 
-The main difference between hooks and plugins is that plugins have hooks (and even additional
-plugins!) within them while hooks do not.  In many ways, the core scripts are primarily hooks
-and plugin points.  With everything done this way, the system is completely modular.
+
+Dependencies
+------------
+Interlude uses a dependency system to operate with its modules. Any extension can depend on any other extension, even with only specific versions. The dependency resolution system can handle mutual dependencies. This is to encourage developers to focus on their specific needs while discouraging developers from reinventing the wheel. There are a few meta-dependencies which can be used. Some meta-dependencies are necessary for Interlude to run. Here's a list of meta-dependency types and sub-types (with examples):
+ 1. content		This class is anything that produces /something/ for output (depends on template)
+    * content	content management (vanilla Joomla)
+    * blog		content management restricted to a subset of users (WordPress in multi-user mode)
+    * wiki		collaborative content management (MediaWiki)
+    * forum		threaded content management (phpBB)
+    * media		photo/video management (Gallery)
+    * message	private content management (private messaging in Facebook)
+    * status	social content management (Twitter)
+ 2. template	This class is anything that organises and outputs content data (depends on content and language)
+    * html		customisable html
+    * xml		xml schema
+    * text		plain text
+    * json		javascript object
+ 3. language	This class handles converting language keys into translated strings
+
+
+Templates
+---------
+Templates are hybrids created between a view and a template layout. Additionally, templates are separate from styling details (colour, image sets, etc). In other words, templates are purely layout and positioning. In order to find the right template, Interlude looks in a number of places for a proper file (though everything has an override). If my site was using a theme called 'dark' and I was looking at a 'post' page made by the 'typepress' blog extension, Interlude would look for one of these files (the first one it finds will work):
+ 1. {extension}/templates/{view}_{template}.php		typepress/templates/post_dark.php
+ 2. {template}/templates/{extension}_{view}.php		dark/templates/typepress_post.php
+ 3. {extension}/templates/{view}.php				typepress/templates/post.php
+ 4. {template}/templates/{class}_{view}.php			dark/templates/blog_post.php
+ 5. {template}/templates/{view}.php					dark/templates/post.php
+ 6. {template}/templates/{class}.php				dark/templates/blog.php
+ 7. {template}/templates/default.php				dark/templates/default.php
+
+Extensions generally produce only /sections/ of output. For the purpose of organising output, extension views should define where their output should go. There are a few standard areas
+
+
+
+Languages
+---------
+..
+
+
+Panels
+------
+
+

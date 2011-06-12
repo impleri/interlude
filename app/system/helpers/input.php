@@ -1,18 +1,17 @@
 <?php
 /**
- * Functions class
+ * input handling object
  *
- * @author Christopher Roussel <christopher@impleri.net>
- * @version $Id$
- * @package Interlude
- * @filesource
+ * @package interlude
+ * @subpackage framework
+ * @copyright Christopher Roussel <christopher@impleri.net>
  */
 
 if (!defined('PLAY_MUSIC')) {
 	die('Play it from the top, Sammie.');
 }
 
-/**#@+
+/**
  * Typecasts
  */
 define('TYPE_SIMPLENAME', -2);
@@ -20,8 +19,9 @@ define('TYPE_STRING', -2);
 define('TYPE_INT', -2);
 define('TYPE_DEP_VERS', -2);
 
-class ilFunctions {
+class ilHelperInput {
 	function typecast ($var, $type=TYPE_STRING, $default=null) {}
+
 	function import ($path) {
 		$pathArray = explode('.',$path);
 		$count = count($pathArray)-1;

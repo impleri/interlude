@@ -1,16 +1,14 @@
 <?php
-//
-//	file: includes/class_template
-//	begin: 01/01/2006
-//	$Author$
-//	$Revision$
-//	$Date$
-//
-//	description: loads and parses template files, then outputs information
+/**
+ * generic template object
+ *
+ * @package interlude
+ * @subpackage framework
+ * @copyright Christopher Roussel <christopher@impleri.net>
+ */
 
-if (!defined('PLAY_MUSIC'))
-{
-	die('No peeksies!');
+if (!defined('PLAY_MUSIC')) {
+	die('Play it from the top, Sammie.');
 }
 
 /*
@@ -20,8 +18,7 @@ if (!defined('PLAY_MUSIC'))
   *
   * Functions: template, load, assign, switch
   */
-class template
-{
+class ilParentTemplate extends ilParentCache {
 	// variables
 	var $_data = array();
 	var $_files = array();
@@ -36,8 +33,7 @@ class template
 
 
 	// Constructor
-	function template()
-	{
+	function template() {
 		// Set file directory and template
 
 		// Check cache info
@@ -45,32 +41,27 @@ class template
 	}
 
 	// Load (cache or source) & compile (if necessary) template
-	function load($file)
-	{
+	function load($file) {
 
 	}
 
 	// Send output
-	function output()
-	{
+	function output() {
 
 	}
 
 	// Assign variable(s)
-	function assign($vars, $value=false)
-	{
+	function assign($vars, $value=false) {
 
 	}
 
 	// Assign variable(s) to specific block
-	function assign_to_block($block, $vars, $value=false)
-	{
+	function assign_to_block($block, $vars, $value=false) {
 
 	}
 
 	// Unset variable(s)
-	function decease($vars)
-	{
+	function decease($vars) {
 
 	}
 }

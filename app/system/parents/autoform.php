@@ -1,45 +1,21 @@
 <?php
-/* file: system/class_form
-** begin: 01/01/2006
-** $Revision$
-** $Date$
-**
-** description: form classes
-**/
+/**
+ * generic autoform field object
+ *
+ * @package interlude
+ * @subpackage framework
+ * @copyright Christopher Roussel <christopher@impleri.net>
+ */
 
-if (!defined('PLAY_MUSIC'))
-{
-	die('Start from the beginning.');
+if (!defined('PLAY_MUSIC')) {
+	die('Play it from the top, Sammie.');
 }
 
-abstract class field
-{
-	function __construct()
-	{
-
-	}
-
-	function debug()
-	{
-		return $this->__construct();
-	}
-}
-
-class input
-{
-	function __construct()
-	{
-		$this->type = 'input';
-		$this->name = '';
-	}
-}
-
-class form
-{
-	private var $name;
-	private var $action;
-	private var $method;
-	private var $fields = array();
+class ilParentAutoform {
+	private $name;
+	private $action;
+	private $method;
+	private $fields = array();
 
 	public function __construct($name, array &$fields, $action='', $method='POST')
 	{
@@ -133,5 +109,3 @@ class form
 		return true;
 	}
 }
-
-?>
