@@ -1,7 +1,7 @@
 Interlude
 =========
 
-I'm resurrecting an old PHP project in the hopes that its existence here will help motivate me to work on it.
+This project is being shelved permanently. When I first began thinking about it, PHP Frameworks were uncommon. However, now that there are plenty -- many which duplicate a lot of the aims of this project -- I do not see a reason to proceed at this time. Perhaps in the future, there will be a great enough need to dust this project off and continue it. For now, it is here for the community.
 
 Most of the work has been conceptual, and those concepts have changed as internet technologies have evolved, but this project was never updated frequently enough. In some ways, it is still a relic of PHP back when OO programming and MVC structure were relatively uncommon in the popular PHP scripts. But that has not changed the conceptual aims of this project, only its implementation.
 
